@@ -1,0 +1,1 @@
+Link-link yang ngarah ke G Drive atau apapun yang di dalam G Drive kebanyakan di-restrict atau iSTTS only.
