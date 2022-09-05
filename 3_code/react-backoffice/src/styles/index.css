@@ -1,0 +1,71 @@
+/* body { */
+  /* margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
+  /* background-color: #FFFBE9 !important; */
+/* } */
+
+.admin-quill .ql-editor {
+  min-height: 260px !important;
+}
+
+.admin-quill .ql-editor > p {
+  text-align: justify;
+}
+
+.admin-quill .ql-container {
+  font-size: 16px !important;
+}
+
+/* ::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #9bcdcb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b9c9a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3d6e6c;
+} */
+
+.primarySwiper .swiper-pagination-bullet {
+  opacity: .9 !important;
+  background-color: #fff !important;
+}
+.primarySwiper .swiper-pagination-bullet-active {
+  background-color: #151D3B !important;
+}
+.primarySwiper .swiper-button-next {
+  color: #151D3B !important;
+}
+.primarySwiper .swiper-button-prev {
+  color: #151D3B !important;
+}
+
+.secondarySwiper .swiper-pagination-bullet {
+  opacity: .9 !important;
+  background-color: #fff !important;
+}
+.secondarySwiper .swiper-pagination-bullet-active {
+  background-color: #D82148 !important;
+}
+.secondarySwiper .swiper-button-next {
+  color: #D82148 !important;
+}
+.secondarySwiper .swiper-button-prev {
+  color: #D82148 !important;
+}
+
+.whiteNavigation .swiper-button-next {
+  color: #fff !important;
+}
+.whiteNavigation .swiper-button-prev {
+  color: #fff !important;
+}

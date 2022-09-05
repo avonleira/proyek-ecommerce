@@ -1,0 +1,33 @@
+import { useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+
+import AuthLoadingBackdrop from "../components/backdrops/AuthLoadingBackdrop";
+import { useAuth } from '../hooks/auth';
+import User from '../backend/Models/User';
+
+// export const mockAdminEmails = [
+// 	"gktnazarethpondokindah@gmail.com", "arielnovachristian01@gmail.com", "verrel24@gmail.com",
+// ]
+
+export default function RouteAdminMiddleware() {
+  const { userNow } = useAuth();
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const navigate = useNavigate();
+
+	const validateUser = async () => {
+		if (!userNow) return navigate("/auth/login", { replace: true });
+		let currUser = await User.findByUid(userNow?.uid).then(([user]) => user);
+		if (!currUser) return navigate("/", { replace: true });
+		if (!currUser.allowAdmin) return navigate("/", { replace: true });
+		// console.log("Check user");
+		setIsLoading(false);
+	}
+	useEffect(() => { validateUser(); }, [userNow])
+
+
+	// if (!Boolean(userNow)) return (<Navigate to="/auth/login" replace />)
+  // if (!mockAdminEmails.includes(userNow.email ?? "")) return (<Navigate to="/" replace />)
+	// return <AuthLoadingBackdrop />;
+	if (isLoading) return <AuthLoadingBackdrop />;
+	return (<Outlet />)
+}
