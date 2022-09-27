@@ -1,9 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   * {
+    font-family: 'Poppins', sans-serif;
     transition: 0.3s;
+  }
+
+  .brand-logo {
+    @apply font-[Gugi] text-primary-500 text-3xl md:text-4xl
+  }
+
+  .form-input,.form-textarea,.form-select,.form-multiselect {
+    @apply rounded w-full !important
+  }
+  .form-input:hover, .form-textarea:hover, .form-select:hover, .form-multiselect:hover {
+    @apply border-slate-800 ring-slate-800 !important
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus, .form-multiselect:focus {
+    @apply border-primary-400 ring-primary-400 !important
+  }
+
+  .form-checkbox,.form-radio {
+    @apply text-primary-500 !important
+  }
+  .form-checkbox:focus,.form-radio:focus {
+    @apply ring-primary-400 !important
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded
+  }
+
+  .btn.btn-sm {
+    @apply px-2 py-1 rounded text-sm
+  }
+
+  .btn.btn-primary {
+    @apply bg-primary-500 text-white duration-300
+  }
+  .btn.btn-primary:hover {
+    @apply bg-primary-700
+  }
+
+  .btn.btn-primary-outline {
+    @apply bg-white text-primary-500 border border-primary-500 duration-500
+  }
+  .btn.btn-primary-outline:hover {
+    @apply bg-primary-500 text-white border
   }
 }
