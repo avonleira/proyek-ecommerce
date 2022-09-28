@@ -47,10 +47,24 @@
     @apply bg-primary-700
   }
 
+  .btn.btn-primary-text {
+    @apply bg-white text-gray-500 duration-500
+  }
+  .btn.btn-primary-text:hover {
+    @apply bg-gray-200 text-primary-500
+  }
+
   .btn.btn-primary-outline {
     @apply bg-white text-primary-500 border border-primary-500 duration-500
   }
   .btn.btn-primary-outline:hover {
     @apply bg-primary-500 text-white border
+  }
+
+  .form-input-search-btn {
+    @apply border border-gray-500 rounded-r peer-focus:bg-primary-500 peer-focus:text-white peer-focus:border-primary-400
+  }
+  .form-input-search-btn:hover {
+    @apply bg-primary-500 text-white border-primary-400
   }
 }

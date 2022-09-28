@@ -15,3 +15,9 @@ export const copyToClipboard = (text: string, consoleIt: boolean = false): boole
     return false;
   }
 }
+
+export const getRandomSearchKeyword = () => {
+  let keywords = ["Keyboard", "Mouse", "PC", "Laptop Gaming", "PC 10 Juta", "CPU", "Intel", "Ryzen"]
+
+  return keywords[Math.floor(Math.random()*keywords.length)]
+}
