@@ -4,6 +4,10 @@ export interface PagePropsInterface {
     name: string
     content: string
   }[]
+  links?: {
+    rel: string
+    href: string
+  }[]
 }
 
 export const loginPageProps: PagePropsInterface = {
@@ -27,3 +31,11 @@ export const registerPasswordTerms = [
   { id: 3, filled: false, label: "Mengandung satu huruf besar" },
   { id: 4, filled: false, label: "Mengandung satu huruf kecil" },
 ]
+
+export const landingPageProps: PagePropsInterface = {
+  title: "Welcome | Duta Tech",
+  metas: [
+    { name: "description", content: "Selaman datang di Duta Tech, solusi dari kebutuhan anda." },
+    { name: "keyword", content: "technology,ecommerce,shop,electronics,software" },
+  ]
+}

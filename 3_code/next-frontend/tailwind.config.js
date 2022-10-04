@@ -23,6 +23,36 @@ module.exports = {
           '900': '#7c410f'
         },
         'secondary': "#F4946C"
+      },
+      animation: {
+        'wiggle': 'wiggle 1s ease-in-out infinite',
+        'fade-in': "fadeIn 500ms forwards",
+        'fade-out': "fadeOut 500ms forwards",
+        'slide-up': "slideUp 500ms forwards",
+        'slide-down': "slideDown 500ms forwards",
+        'fadeout-slidedown': "fadeOut 500ms forwards, slideDown 500ms forwards",
+      },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-6deg)' },
+          '50%': { transform: 'rotate(6deg)' },
+        },
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+        fadeOut: {
+          '0%': { opacity: 1 },
+          '100%': { opacity: 0 },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0%)' },
+        },
+        slideDown: {
+          '0%': { transform: 'translateY(0%)' },
+          '100%': { transform: 'translateY(100%)' },
+        },
       }
     },
   },

@@ -10,7 +10,7 @@ function MainHeader(props: IProps) {
   return (
     <header className={`${props.className}`}>
       <div className="bg-blue-600 py-4 fixed w-full shadow-lg">
-        <nav id="header-nav" className="max-w-7xl mx-auto px-4 flex flex-row justify-between items-center gap-4 md:gap-8">
+        <nav id="header-nav" className="max-w-6xl mx-auto px-4 flex flex-row justify-between items-center gap-4 md:gap-8">
           <Link href="/">
             <a className="text-3xl text-white">
               {"Brand Name"}
@@ -32,7 +32,7 @@ function MainHeader(props: IProps) {
       </div>
       <div className="pt-16">
         <div className="bg-blue-500 py-1 pt-2">
-          <nav id="header-nav-2" className="max-w-7xl px-4 mx-auto">
+          <nav id="header-nav-2" className="max-w-6xl px-4 mx-auto">
             <p className="text-white text-sm">Second Navbar</p>
           </nav>
         </div>
