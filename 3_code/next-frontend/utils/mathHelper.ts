@@ -11,3 +11,8 @@ export const range = (attr: IRangeAttr) => {
   }
   return result;
 }
+
+export function calcPercent(num: number, percentage: number, decimal: number = 0){
+  const result = num * (percentage / 100);
+  return parseFloat(result.toFixed(decimal));
+}

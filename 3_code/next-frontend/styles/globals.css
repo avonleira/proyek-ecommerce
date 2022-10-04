@@ -13,6 +13,7 @@
     transition: 0.3s;
   }
 
+  /* Custom Elements */
   .brand-logo {
     @apply font-[Gugi] text-primary-500 text-xl md:text-2xl lg:text-3xl xl:text-4xl
   }
@@ -20,6 +21,35 @@
     @apply font-[Gugi] text-zinc-500 text-2xl md:text-3xl hover:text-primary-500
   }
 
+  .my-container {
+    @apply w-full max-w-6xl mx-auto px-4
+  }
+  /* End Custom Elements */
+
+  /* Swiper Elements */
+  .primarySwiper .swiper-pagination-bullet {
+    opacity: .9 !important;
+    @apply bg-white !important;
+  }
+  .primarySwiper .swiper-pagination-bullet-active {
+    @apply bg-primary-500 !important;
+  }
+  .primarySwiper .swiper-button-next {
+    @apply text-primary-500 animate-fade-in !important;
+  }
+  .primarySwiper .swiper-button-prev {
+    @apply text-primary-500 animate-fade-in !important;
+  }
+  
+  .whiteNavigation .swiper-button-next {
+    @apply text-white !important;
+  }
+  .whiteNavigation .swiper-button-prev {
+    @apply text-white !important;
+  }
+  /* End Swiper Elements */
+
+  /* Tailwind Form Plugin */
   .form-input,.form-textarea,.form-select,.form-multiselect {
     @apply rounded w-full !important
   }
@@ -36,7 +66,15 @@
   .form-checkbox:focus,.form-radio:focus {
     @apply ring-primary-400 !important
   }
+  /* End Tailwind Form Plugin */
 
+  /* Tailwind Typography Plugin */
+  /* .prose * {
+    @apply my-0 !important
+  } */
+  /* End Tailwind Typography Plugin */
+
+  /* Custom Component */
   .btn {
     @apply px-4 py-2 rounded text-center
   }
@@ -78,4 +116,5 @@
   .form-input-search-btn-contained:hover {
     @apply bg-primary-600
   }
+  /* End Custom Component */
 }

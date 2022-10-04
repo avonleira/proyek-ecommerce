@@ -44,10 +44,10 @@ function MainLayout(props: IProps) {
     <div className={` ${props.className}`}>
       <MyNextHead pageProps={props.pageProps} />
       { openBackdrop ? (
-        <div className="fixed top-0 bottom-0 left-0 right-0 bg-black opacity-50 z-0" />
+        <div className="fixed top-0 bottom-0 left-0 right-0 bg-black opacity-50 z-10" />
       ) : null }
       <MainHeader refElement={headerRef} setOpenBackdrop={setOpenBackdrop} />
-      <main className={`${props.bodyNoMinHeight?"":"min-h-screen"} `}>
+      <main className={`${props.bodyNoMinHeight?"":"min-h-screen"} pt-12 md:pt-28`}>
       {/* <main className={`pt-[${document?.getElementById("header")?.offsetHeight ?? 100}]`}> */}
         {props.children}
       </main>

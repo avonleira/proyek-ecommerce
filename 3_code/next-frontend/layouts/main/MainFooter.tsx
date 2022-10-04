@@ -23,7 +23,7 @@ function MainFooter() {
   
   return (
     <footer className="w-full border-t py-6 md:py-10">
-      <div id="footer-top" className="grid grid-cols-12 md:grid-cols-11 gap-4 max-w-6xl mx-auto px-4 pb-8">
+      <div id="footer-top" className="grid grid-cols-12 md:grid-cols-11 gap-4 my-container pb-8">
         <div className="col-span-6 md:col-span-3">
           <div className="mb-4">
             <h6 className="font-semibold text-lg">Duta Tech</h6>

@@ -47,12 +47,12 @@ function MainHeader(props: IProps) {
   }, [openCatBar])
 
   return (
-    <header ref={props.refElement} className={`${props.className??""} z-10`} onMouseLeave={() => { setOpenCatBar(false) }}>
+    <header ref={props.refElement} className={`${props.className??""} relative z-10`} onMouseLeave={() => { setOpenCatBar(false) }}>
       {/* <CategoryPopup show={openCatBar} setShow={setOpenCatBar} /> */}
       <div className={`bg-white fixed w-full`}>
         <div className={`${openCatBar?"border-b":"shadow-lg"}`}>
           <div className="hidden md:block bg-gray-200 py-0.5">
-            <nav id="header-nav-top" className="w-full max-w-6xl mx-auto px-4">
+            <nav id="header-nav-top" className="my-container">
               <div className="flex flex-row justify-between">
                 <div className="text-sm">
                   Social Link
@@ -67,7 +67,7 @@ function MainHeader(props: IProps) {
               </div>
             </nav>
           </div>
-          <nav id="header-nav-main" className="max-w-6xl mx-auto px-4 py-2">
+          <nav id="header-nav-main" className="my-container py-2">
             <div className="grid grid-cols-12 gap-2">
               {/* COL 1: BRAND LOGO */}
               <div className="col-span-12 md:col-span-2">
@@ -142,7 +142,7 @@ function MainHeader(props: IProps) {
 
 function CategorySection() {
   return (
-    <div className="w-full mx-h-[50vh] max-w-6xl mx-auto px-4 py-2">
+    <div className="my-container mx-h-[50vh] py-2">
       <div className="flex flex-row gap-2">
         <div className="flex-none w-52">
           <ul className="overflow-y-auto h-[48vh]">
