@@ -1,26 +1,27 @@
-import { IsNotEmpty, IsEmail, IsNumberString, IsEnum } from 'class-validator'
-import { Match } from 'src/extensions/custom.validator';
+import { IsNumberString, IsEnum, IsOptional, IsISO8601, ValidateIf, isNotEmpty, IsNotEmpty } from 'class-validator'
+import { MatchIfExist } from 'src/extensions/custom.validator';
 import { GenderType } from 'src/utils/enums';
 
 export class UpdateUserDto {
+  @ValidateIf(o => o.password != undefined)
   @IsNotEmpty()
+  oldPassword: string
+
   password: string;
-  
-  @Match('password')
-  @IsNotEmpty()
+  @MatchIfExist('password')
   confirmPassword: string
 
-  @IsNotEmpty()
   name: string;
-
+  
+  @IsOptional()
   @IsEnum(GenderType) 
-  @IsNotEmpty()
   gender: GenderType;
 
+  @IsOptional()
   @IsNumberString()
-  @IsNotEmpty()
   phone_number: string;
 
-  @IsNotEmpty()
+  @IsOptional()
+  @IsISO8601()
   date_birth: string;
 }

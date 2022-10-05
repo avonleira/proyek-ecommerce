@@ -1,4 +1,4 @@
-import { Param, Body, Controller, Get, Post, Put, UsePipes, ValidationPipe, ParseIntPipe, HttpException, HttpStatus } from '@nestjs/common';
+import { Param, Body, Controller, Get, Post, Put, UsePipes, ValidationPipe, ParseIntPipe, BadRequestException, NotImplementedException, Delete, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
 import * as bcrypt from 'bcrypt';
@@ -11,22 +11,20 @@ export class UsersController {
 
   }
   @Get()
-  async getAllUser() {
-    const users = await this.userService.getAllUser();
-    return users;
+  async findAll() {
+    return await this.userService.findAll();
   }
 
   @Get(':id')
-  async getUserById(@Param('id', ParseIntPipe) id: number) {
-    const users = await this.userService.getUserById(id);
-    return users;
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.findOne(id);
   }
 
   @Post()
   @UsePipes(new ValidationPipe())
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    if (await (await this.userService.getUserByEmail(createUserDto.email)).length > 0) {
-      throw new HttpException('Email already exist', HttpStatus.BAD_REQUEST);
+  async create(@Body() createUserDto: CreateUserDto) {
+    if (await (await this.userService.findByEmail(createUserDto.email)).length > 0) {
+      throw new BadRequestException('Email already exist');
     }
     const createUserParams = {
       email: createUserDto.email,
@@ -36,12 +34,32 @@ export class UsersController {
       phone_number: createUserDto.phone_number,
       date_birth: new Date(createUserDto.date_birth),
     }
-    return this.userService.createUser(createUserParams);
+    return await this.userService.create(createUserParams);
   }
 
   @Put(':id')
-  updateUser(@Param('id', ParseIntPipe) id: number, @Body() UpdateUserDto: UpdateUserDto) {
-    // this.userService.updateUser(id);
-    throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED)
+  @UsePipes(new ValidationPipe())
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const user = await this.userService.findOne(id);
+    if (!user)
+      throw new NotFoundException('User not found');
+    if (updateUserDto.oldPassword && !await bcrypt.compare(updateUserDto.oldPassword, user.password))
+      throw new BadRequestException('Incorrect password');
+    const updateUserParams = {
+      password: updateUserDto.password ? await bcrypt.hash(updateUserDto.password, await bcrypt.genSalt()) : undefined,
+      name: updateUserDto.name,
+      gender: updateUserDto.gender,
+      phone_number: updateUserDto.phone_number,
+      date_birth: new Date(updateUserDto.date_birth),
+    }
+    return await this.userService.update(id, updateUserParams);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.remove(id);
   }
 }
