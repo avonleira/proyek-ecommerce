@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 
 import MyNextHead from "../../components/MyNextHead";
 import { registerPageProps, registerPasswordTerms } from "../../data/pageProps";
+import registerImage from "../../public/images/Register.jpg";
 
 interface IProps {
   pageProps: typeof registerPageProps
@@ -119,7 +120,7 @@ const RegisterPage = (props: IProps) => {
       <div className="hidden md:block col-span-8 relative">
         <div className="fixed h-screen w-full bg-primary-400">
           {/* Tempat gambar */}
-          <img src="" alt="Gambar Regsiter Page | Duta Tech" />
+          <img src={registerImage.src} alt="Gambar Regsiter Page | Duta Tech" />
         </div>
       </div>
     </div>

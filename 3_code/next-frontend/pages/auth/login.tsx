@@ -1,13 +1,16 @@
 import Link from "next/link";
+import { type } from "os";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import MyNextHead from "../../components/MyNextHead";
 import { loginPageProps } from "../../data/pageProps";
+import loginImage from "../../public/images/Selamat_Datang.jpg";
 
 interface IProps {
   pageProps: typeof loginPageProps
 }
+
 
 const LoginPage = (props: IProps) => {
   const [showPass, setShowPass] = useState<boolean>(false);
@@ -81,7 +84,7 @@ const LoginPage = (props: IProps) => {
       <div className="hidden md:block col-span-8 relative">
         <div className="fixed h-screen w-full bg-primary-400">
           {/* Tempat gambar */}
-          <img src="" alt="Gambar Login Page | Duta Tech" />
+          <img src={loginImage.src} alt="Gambar Login Page | Duta Tech" />
         </div>
       </div>
     </div>
