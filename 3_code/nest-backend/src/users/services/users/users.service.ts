@@ -2,13 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/typeorm/entities/User';
-import { CreateUserParams, UpdateUserParams } from 'src/utils/types';
+import { CreateUserParams, UpdateUserParams } from 'src/users/types/types';
+import { UserAddress } from 'src/typeorm/entities/UserAddress';
+import { encodePassword } from 'src/utils/bcrypt';
 
 @Injectable()
 export class UsersService {
 
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(UserAddress) private userAddressRepository: Repository<UserAddress>,
   ) {}
 
   findAll() {
@@ -24,7 +27,8 @@ export class UsersService {
   }
 
   create(userDetails: CreateUserParams) {
-    const newUser = this.userRepository.create(userDetails);
+    const password = encodePassword(userDetails.password)
+    const newUser = this.userRepository.create({...userDetails, password});
     return this.userRepository.save(newUser);
   }
 

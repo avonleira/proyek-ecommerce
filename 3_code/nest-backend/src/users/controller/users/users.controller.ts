@@ -1,8 +1,9 @@
-import { Param, Body, Controller, Get, Post, Put, UsePipes, ValidationPipe, ParseIntPipe, BadRequestException, NotImplementedException, Delete, NotFoundException } from '@nestjs/common';
+import { Param, Body, Controller, Get, Post, Put, UsePipes, ValidationPipe, ParseIntPipe, BadRequestException, NotImplementedException, Delete, NotFoundException, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from 'src/users/dtos/UpdateUser.dto';
+import { User } from 'src/typeorm/entities/User';
 
 @Controller('users')
 export class UsersController {
@@ -10,16 +11,22 @@ export class UsersController {
   constructor(private userService: UsersService) {
 
   }
+  
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async findAll() {
-    return await this.userService.findAll();
+    const users = await this.userService.findAll();
+    return users.map((user) => user);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.userService.findOne(id);
+    const user = await this.userService.findOne(id);
+    return user;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @UsePipes(new ValidationPipe())
   async create(@Body() createUserDto: CreateUserDto) {
@@ -28,22 +35,24 @@ export class UsersController {
     }
     const createUserParams = {
       email: createUserDto.email,
-      password: await bcrypt.hash(createUserDto.password, await bcrypt.genSalt()),
+      password: createUserDto.password,
       name: createUserDto.name,
       gender: createUserDto.gender,
       phone_number: createUserDto.phone_number,
       date_birth: new Date(createUserDto.date_birth),
     }
-    return await this.userService.create(createUserParams);
+    const user = await this.userService.create(createUserParams);
+    return user;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
   @UsePipes(new ValidationPipe())
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const user = await this.userService.findOne(id);
+    var user = await this.userService.findOne(id);
     if (!user)
       throw new NotFoundException('User not found');
     if (updateUserDto.oldPassword && !await bcrypt.compare(updateUserDto.oldPassword, user.password))
@@ -55,11 +64,24 @@ export class UsersController {
       phone_number: updateUserDto.phone_number,
       date_birth: new Date(updateUserDto.date_birth),
     }
-    return await this.userService.update(id, updateUserParams);
+    const result = await this.userService.update(id, updateUserParams);
+    if (result.affected > 0) {
+      user = await this.userService.findOne(id);
+      return user;
+    } else {
+      throw new BadRequestException('Failed to update')
+    }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return await this.userService.remove(id);
+    const result = await this.userService.remove(id);
+    if (result.affected > 0) {
+      const user = await this.userService.findOne(id);
+      return user;
+    } else {
+      throw new BadRequestException('Failed to delete')
+    }
   }
 }

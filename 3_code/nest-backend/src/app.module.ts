@@ -3,19 +3,29 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './typeorm/entities/User';
+import { UserAddress } from './typeorm/entities/UserAddress';
 import { UsersModule } from './users/users.module';
+import { AccountModule } from './account/account.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: '',
-    database: 'duta_tech',
-    entities: [User],
-    synchronize: true,
-  }), UsersModule],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: `${process.env.DB_HOST}`,
+      port: Number(process.env.DB_PORT),
+      username: `${process.env.DB_USERNAME}`,
+      password: `${process.env.DB_PASSWORD}`,
+      database: `${process.env.DB_NAME}`,
+      entities: [User, UserAddress],
+      synchronize: true,
+    }), 
+    UsersModule,
+    AccountModule,
+    AuthModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, OneToMany } from 'typeorm';
+import { UserAddress } from './UserAddress';
 
 @Entity({ name: 'users' })
 export class User {
@@ -12,7 +13,10 @@ export class User {
   password: string;
 
   @Column()
-  name: string;
+  first_name: string;
+
+  @Column()
+  last_name: string;
 
   @Column()
   gender: string;
@@ -20,7 +24,7 @@ export class User {
   @Column()
   phone_number: string;
 
-  @Column()
+  @Column({ nullable: true })
   date_birth: Date;
 
   @Column({ nullable: true })
@@ -34,4 +38,7 @@ export class User {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => UserAddress, (userAddress) => userAddress.user)
+  addresses: UserAddress[];
 }
