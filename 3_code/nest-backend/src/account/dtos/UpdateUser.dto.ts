@@ -30,4 +30,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsISO8601()
   date_birth: string;
+
+  profile_picture: string
 }

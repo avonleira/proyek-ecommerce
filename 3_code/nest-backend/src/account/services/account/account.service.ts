@@ -1,11 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from 'src/account/dtos/UpdateUser.dto';
 import { User } from 'src/typeorm/entities/User';
 import { UserAddress } from 'src/typeorm/entities/UserAddress';
 import { Repository } from 'typeorm';
 import { comparePassword, encodePassword } from 'src/utils/bcrypt';
-
+import * as fs from 'fs';
 @Injectable()
 export class AccountService {
   constructor(
@@ -20,17 +20,17 @@ export class AccountService {
       .getOne();
   }
 
-  async updateUserProfile(id: number, updateUserDto: UpdateUserDto) {
+  async updateUserProfile(id: number, updateUserDto: UpdateUserDto, file) {
     const { old_password, confirm_password, ...new_profile } = updateUserDto;
     const user = await this.userRepository.findOneBy({id: id});
     if (!user)
       throw new NotFoundException('User not found');
     if (old_password && !comparePassword(old_password, user.password))
       throw new BadRequestException('Incorrect password');
-    if (new_profile.password) {
+    if (new_profile.password) 
       new_profile.password = encodePassword(new_profile.password)
-    }
-
+    if (updateUserDto.profile_picture)
+      fs.unlink(`.\\${user.profile_picture}`, (err) => new InternalServerErrorException(err))
     const result = await this.userRepository.update({ id }, { ...new_profile });
     if (result.affected > 0) {
       const new_user = await this.userRepository.findOneBy({id: id});

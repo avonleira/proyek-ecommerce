@@ -1,8 +1,10 @@
-import { Param, Body, Controller, Get, Post, Put, UsePipes, ValidationPipe, ParseIntPipe, BadRequestException, NotImplementedException, Delete, NotFoundException, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, Put, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, UploadedFiles, ParseFilePipe, FileTypeValidator } from '@nestjs/common';
 import { UpdateUserDto } from 'src/account/dtos/UpdateUser.dto';
 import { SerializedProfile } from 'src/account/serialization/SerializedProfile';
 import { AccountService } from 'src/account/services/account/account.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { FilesInterceptor } from '@nestjs/platform-express/multer';
+import { RegexFileTypeValidator } from 'src/extensions/MulterRegexFileType.validator';
 
 @Controller('account')
 export class AccountController {
@@ -21,12 +23,20 @@ export class AccountController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor, FilesInterceptor('profile_picture'))
   @Put()
-  async updateAccount(@Request() req, @Body() updateUserDto : UpdateUserDto) {
-    const account = await this.accountService.updateUserProfile(req.user.id, updateUserDto);
+  async updateAccount(
+    @UploadedFiles(
+      new ParseFilePipe({
+        validators: [
+          new RegexFileTypeValidator({ fileType: new RegExp(/(jpg|jpeg|png|gif)$/)})
+        ] 
+      })
+    ) file: Express.Multer.File, @Request() req, @Body() updateUserDto : UpdateUserDto) {
+    updateUserDto.profile_picture = file[0]?.path;
+    const account = await this.accountService.updateUserProfile(req.user.id, updateUserDto, file);
     if (account)
-      return new SerializedProfile(account)
+      return new SerializedProfile(account);
   }
 
   @UseGuards(JwtAuthGuard)
