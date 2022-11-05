@@ -5,6 +5,8 @@ import { AccountService } from 'src/account/services/account/account.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express/multer';
 import { RegexFileTypeValidator } from 'src/extensions/MulterRegexFileType.validator';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('account')
 export class AccountController {
@@ -23,13 +25,22 @@ export class AccountController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(ClassSerializerInterceptor, FilesInterceptor('profile_picture'))
+  @UseInterceptors(ClassSerializerInterceptor, FilesInterceptor('profile_picture', 1, {
+    storage: diskStorage({
+      destination: './uploads/accounts',
+      filename: (req, file, callback) => {
+        const ext = extname(file.originalname);
+        const filename = `${new Date().getTime()}${ext}`;
+        callback(null, filename);
+      }
+    })
+  }))
   @Put()
   async updateAccount(
     @UploadedFiles(
       new ParseFilePipe({
         validators: [
-          new RegexFileTypeValidator({ fileType: new RegExp(/(jpg|jpeg|png|gif)$/)})
+          new RegexFileTypeValidator({ regex: new RegExp(/(jpg|jpeg|png|gif)$/)})
         ] 
       })
     ) file: Express.Multer.File, @Request() req, @Body() updateUserDto : UpdateUserDto) {

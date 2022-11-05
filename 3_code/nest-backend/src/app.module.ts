@@ -8,6 +8,11 @@ import { UsersModule } from './users/users.module';
 import { AccountModule } from './account/account.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { ProductModule } from './product/product.module';
+import { Product } from './typeorm/entities/Product';
+import { ProductOption } from './typeorm/entities/ProductOption';
+import { ProductOptionValue } from './typeorm/entities/ProductOptionValue';
+import { ProductInventory } from './typeorm/entities/ProductInventory';
 
 @Module({
   imports: [
@@ -19,12 +24,13 @@ import { ConfigModule } from '@nestjs/config';
       username: `${process.env.DB_USERNAME}`,
       password: `${process.env.DB_PASSWORD}`,
       database: `${process.env.DB_NAME}`,
-      entities: [User, UserAddress],
+      entities: [User, UserAddress, Product, ProductOption, ProductOptionValue, ProductInventory],
       synchronize: true,
     }), 
     UsersModule,
     AccountModule,
-    AuthModule
+    AuthModule,
+    ProductModule
   ],
   controllers: [AppController],
   providers: [AppService],
