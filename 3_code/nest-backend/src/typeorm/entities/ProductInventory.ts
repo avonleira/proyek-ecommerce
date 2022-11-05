@@ -6,6 +6,9 @@ export class ProductInventory {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({unique: true})
+  SKU: string;
+
   @ManyToOne(() => Product, (product) => product.product_options)
   @JoinColumn({name: 'product_id', referencedColumnName: 'id'})
   product_id: number;

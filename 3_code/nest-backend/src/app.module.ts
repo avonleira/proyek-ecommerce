@@ -13,6 +13,7 @@ import { Product } from './typeorm/entities/Product';
 import { ProductOption } from './typeorm/entities/ProductOption';
 import { ProductOptionValue } from './typeorm/entities/ProductOptionValue';
 import { ProductInventory } from './typeorm/entities/ProductInventory';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { ProductInventory } from './typeorm/entities/ProductInventory';
     UsersModule,
     AccountModule,
     AuthModule,
-    ProductModule
+    ProductModule,
+    AdminModule
   ],
   controllers: [AppController],
   providers: [AppService],
