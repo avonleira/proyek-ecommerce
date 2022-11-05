@@ -15,6 +15,8 @@ import { ProductOptionValue } from './typeorm/entities/ProductOptionValue';
 import { ProductInventory } from './typeorm/entities/ProductInventory';
 import { AdminModule } from './admin/admin.module';
 import { Faq } from './typeorm/entities/Faq';
+import { PageProp } from './typeorm/entities/PageProp';
+import { PageModule } from './page/page.module';
 
 @Module({
   imports: [
@@ -26,14 +28,15 @@ import { Faq } from './typeorm/entities/Faq';
       username: `${process.env.DB_USERNAME}`,
       password: `${process.env.DB_PASSWORD}`,
       database: `${process.env.DB_NAME}`,
-      entities: [User, UserAddress, Product, ProductOption, ProductOptionValue, ProductInventory, Faq],
+      entities: [User, UserAddress, Product, ProductOption, ProductOptionValue, ProductInventory, Faq, PageProp],
       synchronize: true,
     }), 
     UsersModule,
     AccountModule,
     AuthModule,
     ProductModule,
-    AdminModule
+    AdminModule,
+    PageModule
   ],
   controllers: [AppController],
   providers: [AppService],
