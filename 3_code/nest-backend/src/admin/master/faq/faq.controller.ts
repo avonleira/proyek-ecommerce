@@ -17,6 +17,6 @@ export class FaqController {
   }
   @Post()
   addFaq(@Body() createFaq: any) {
-
+    
   }
 }
