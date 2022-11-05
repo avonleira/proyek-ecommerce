@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, UploadedFiles, ParseFilePipe, FileTypeValidator } from '@nestjs/common';
+import { Body, Controller, Get, Put, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, UploadedFiles, ParseFilePipe, FileTypeValidator, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UpdateUserDto } from 'src/account/dtos/UpdateUser.dto';
 import { SerializedProfile } from 'src/account/serialization/SerializedProfile';
 import { AccountService } from 'src/account/services/account/account.service';
@@ -35,6 +35,7 @@ export class AccountController {
       }
     })
   }))
+  @UsePipes(new ValidationPipe())
   @Put()
   async updateAccount(
     @UploadedFiles(

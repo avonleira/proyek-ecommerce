@@ -19,7 +19,7 @@ export class UpdateUserDto {
   @IsNotEmpty()
   last_name: string;
   
-  @IsOptional()
+  @IsNotEmpty()
   @IsEnum(GenderType) 
   gender: GenderType;
 
