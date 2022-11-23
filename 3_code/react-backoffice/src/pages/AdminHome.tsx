@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Stack, Typography } from '@mui/material'
+import { Icon, Stack, Typography } from '@mui/material'
 
 import MyBreadCrumbs, { IMyBreadCrumbs } from '../components/MyBreadCrumbs'
 import AdminLayout from '../layouts/AdminLayout'
@@ -36,7 +36,7 @@ export default function AdminHome() {
         {`Welcome, ${userNow?.displayName ?? userNow?.email}!`}
       </Typography>
       <Typography variant="subtitle1">
-        {"Fitur untuk dashboard akan menyusul di patch berikutnya."}
+        {"Fitur untuk dashboard akan menyusul di patch berikutnya. asd"}<Icon children="google" />
       </Typography>
     </AdminLayout>
   )

@@ -48,7 +48,7 @@ const HomePage = (props: IProps) => {
             className="col-span-1 p-2 rounded border shadow text-white bg-primary-500 group cursor-pointer"
             onClick={() => {}}
           >
-            <p className="inline-block text-sm md:text-base group-hover:animate-bounce">Semua</p>
+            <p className="inline-block text-sm md:text-base group-hover:animate-bounce">{"Semua"}</p>
           </div>
           { categories?.slice(0, 5)?.map((item, index) => (
             <Link key={`landing-categories-item-${index}`} href={`/cat/${item.slug}`}>
@@ -101,7 +101,7 @@ function ProductEtalaseSection(props: ProductEtalaseSectionProps) {
         <h1 className="text-xl font-semibold">{etalase.header}</h1>
         <div className="font-semibold flex-1 text-right">
           <Link href={`/discovery/${etalase.slug}`}>
-            <a className="text-sm text-primary-500 hover:text-primary-600">Lihat Semua</a>
+            <a className="text-sm text-primary-500 hover:text-primary-600">{"Lihat Semua"}</a>
           </Link>
         </div>
       </div>
@@ -110,7 +110,7 @@ function ProductEtalaseSection(props: ProductEtalaseSectionProps) {
       ) : null }
       <div className="hidden md:block font-semibold flex-1 md:text-right">
         <Link href={`/discovery/${etalase.slug}`}>
-          <a className="text-sm text-primary-500 hover:text-primary-600">Lihat Semua</a>
+          <a className="text-sm text-primary-500 hover:text-primary-600">{"Lihat Semua"}</a>
         </Link>
       </div>
     </div>
