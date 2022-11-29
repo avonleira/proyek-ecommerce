@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Put, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, UploadedFiles, ParseFilePipe, FileTypeValidator, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Put, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, UploadedFiles, ParseFilePipe, FileTypeValidator, UsePipes, ValidationPipe, UploadedFile } from '@nestjs/common';
 import { UpdateUserDto } from 'src/account/dtos/UpdateUser.dto';
 import { SerializedProfile } from 'src/account/serialization/SerializedProfile';
 import { AccountService } from 'src/account/services/account/account.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { FilesInterceptor } from '@nestjs/platform-express/multer';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express/multer';
 import { RegexFileTypeValidator } from 'src/extensions/MulterRegexFileType.validator';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -25,7 +25,7 @@ export class AccountController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(ClassSerializerInterceptor, FilesInterceptor('profile_picture', 1, {
+  @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('profile_picture', {
     storage: diskStorage({
       destination: './uploads/accounts',
       filename: (req, file, callback) => {
@@ -38,14 +38,15 @@ export class AccountController {
   @UsePipes(new ValidationPipe())
   @Put()
   async updateAccount(
-    @UploadedFiles(
+    @UploadedFile(
       new ParseFilePipe({
         validators: [
           new RegexFileTypeValidator({ regex: new RegExp(/(jpg|jpeg|png|gif)$/)})
-        ] 
+        ],
+        fileIsRequired: false,
       })
     ) file: Express.Multer.File, @Request() req, @Body() updateUserDto : UpdateUserDto) {
-    updateUserDto.profile_picture = file[0]?.path;
+    updateUserDto.profile_picture = file?.path;
     const account = await this.accountService.updateUserProfile(req.user.id, updateUserDto, file);
     if (account)
       return new SerializedProfile(account);

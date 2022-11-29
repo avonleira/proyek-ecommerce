@@ -9,7 +9,7 @@ export class ProductInventory {
   @Column({unique: true})
   SKU: string;
 
-  @ManyToOne(() => Product, (product) => product.product_options)
+  @ManyToOne(() => Product, (product) => product.product_inventory)
   @JoinColumn({name: 'product_id', referencedColumnName: 'id'})
   product_id: number;
 

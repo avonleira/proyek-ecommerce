@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, OneToMany} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, OneToMany, ManyToMany} from 'typeorm';
 import { Product } from './Product';
 import { ProductOptionValue } from './ProductOptionValue';
 
@@ -7,12 +7,8 @@ export class ProductOption {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Product, (product) => product.product_options)
-  @JoinColumn({name: 'product_id', referencedColumnName: 'id'})
-  product_id: number;
-
   @OneToMany(() => ProductOptionValue, (productOptionValue) => productOptionValue.product_option_id)
-  product_options: ProductOptionValue[];
+  product_option_values: ProductOptionValue[];
 
   @Column()
   option_name: string;

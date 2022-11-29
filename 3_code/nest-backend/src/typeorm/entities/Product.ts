@@ -1,32 +1,40 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, IsNull} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, IsNull, ManyToMany, JoinTable, ManyToOne, JoinColumn} from 'typeorm';
+import { ProductCategory } from './ProductCategory';
 import { ProductInventory } from './ProductInventory';
-import { ProductOption } from './ProductOption';
 
 @Entity({ name: 'product' })
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({nullable: true})
   title: string;
 
-  @Column()
+  @Column({nullable: true})
   description: string;
 
   @Column({nullable: true})
   slug: string;
 
-  @Column()
-  weight_type: string;
+  @Column({nullable: true})
+  weight: number;
 
-  @Column()
-  weight_value: number;
+  @ManyToOne(() => ProductCategory, (ProductCategory) => ProductCategory.product)
+  @JoinColumn({name: 'product_category_id', referencedColumnName: 'id'})
+  @Column({nullable: true})
+  product_category_id: number;
 
-  @OneToMany(() => ProductOption, (productOption) => productOption.product_id)
-  product_options: ProductOption[];
+  @Column({default: "[]"})
+  product_option_refs: string;
+
+  @Column({default: "[]"})
+  image_refs: string;
+
+  @Column({default: true})
+  is_draft: boolean;
 
   @OneToMany(() => ProductInventory, (productInventory) => productInventory.product_id)
-  product_inventory: ProductOption[];
+  product_inventory: ProductInventory[];
 
   @CreateDateColumn()
   created_at: Date;

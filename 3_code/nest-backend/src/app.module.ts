@@ -17,6 +17,8 @@ import { AdminModule } from './admin/admin.module';
 import { Faq } from './typeorm/entities/Faq';
 import { PageProp } from './typeorm/entities/PageProp';
 import { PageModule } from './page/page.module';
+import { Image } from './typeorm/entities/Image';
+import { ProductCategory } from './typeorm/entities/ProductCategory';
 
 @Module({
   imports: [
@@ -35,8 +37,10 @@ import { PageModule } from './page/page.module';
         ProductOption,
         ProductOptionValue,
         ProductInventory,
+        ProductCategory,
         Faq,
         PageProp,
+        Image,
       ],
       synchronize: true,
     }), 
