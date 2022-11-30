@@ -10,10 +10,10 @@ export class ProductCategory {
   @Column()
   category_name: string;
 
-  @Column()
+  @Column({ nullable: true })
   parent_id: number;
 
-  @Column()
+  @Column({ nullable: true })
   level: number;
 
   @OneToMany(() => Product, (Product) => Product.product_category_id)

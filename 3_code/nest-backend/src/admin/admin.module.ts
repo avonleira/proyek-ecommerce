@@ -10,6 +10,9 @@ import { ProductOption } from 'src/typeorm/entities/ProductOption';
 import { ProductOptionValue } from 'src/typeorm/entities/ProductOptionValue';
 import { ProductInventory } from 'src/typeorm/entities/ProductInventory';
 import { Image } from 'src/typeorm/entities/Image';
+import { ProductCategoryController } from './master/product_category/product_category.controller';
+import { ProductCategoryService } from './master/product_category/product_category.service';
+import { ProductCategory } from 'src/typeorm/entities/ProductCategory';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
@@ -18,10 +21,11 @@ import { Image } from 'src/typeorm/entities/Image';
     ProductOption,
     ProductOptionValue,
     ProductInventory,
+    ProductCategory,
     Image
   ])],
-  exports: [ProductService],
-  controllers: [ProductController, FaqController],
-  providers: [ProductService, FaqService]
+  exports: [ProductService, ProductCategoryService],
+  controllers: [ProductController, FaqController, ProductCategoryController],
+  providers: [ProductService, FaqService, ProductCategoryService]
 })
 export class AdminModule {}

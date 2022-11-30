@@ -43,7 +43,7 @@ export class ProductController {
     return this.productService.deleteProduct(id);
   }
 
-  @Post("image/:product_id")
+  @Post(":product_id/image")
   @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('product_image', {
     storage: diskStorage({
       destination: './uploads/products',
@@ -66,5 +66,11 @@ export class ProductController {
     @Param('product_id', ParseIntPipe) id: number
   ) {
     return await this.productService.uploadProductImage(id, file);
+  }
+
+  @Delete(":product_id/image/:image_id")
+  @UsePipes(new ValidationPipe())
+  async deleteProductImage(@Param('product_id', ParseIntPipe) product_id: number, @Param('image_id', ParseIntPipe) image_id: number) {
+    return await this.productService.deleteProductImage(product_id, image_id)
   }
 }

@@ -7,24 +7,19 @@ export class UpdateProductDto {
   @IsNotEmpty()
   description: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   slug: string;
 
   @IsNotEmpty()
   @IsNumberString()
   weight: number;
 
-  @IsOptional()
   @IsNotEmpty()
   category_id: number;
 
   @IsOptional()
   @IsNotEmpty()
   product_option_refs: string;
-
-  @IsOptional()
-  @IsNotEmpty()
-  image_refs: string;
 
   @IsOptional()
   @IsNotEmpty()
