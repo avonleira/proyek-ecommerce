@@ -13,6 +13,8 @@ import { Image } from 'src/typeorm/entities/Image';
 import { ProductCategoryController } from './master/product_category/product_category.controller';
 import { ProductCategoryService } from './master/product_category/product_category.service';
 import { ProductCategory } from 'src/typeorm/entities/ProductCategory';
+import { ProductOptionController } from './master/product_option/product_option.controller';
+import { ProductOptionService } from './master/product_option/product_option.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
@@ -24,8 +26,8 @@ import { ProductCategory } from 'src/typeorm/entities/ProductCategory';
     ProductCategory,
     Image
   ])],
-  exports: [ProductService, ProductCategoryService],
-  controllers: [ProductController, FaqController, ProductCategoryController],
-  providers: [ProductService, FaqService, ProductCategoryService]
+  exports: [ProductService, ProductCategoryService, ProductOptionService],
+  controllers: [ProductController, FaqController, ProductCategoryController, ProductOptionController],
+  providers: [ProductService, FaqService, ProductCategoryService, ProductOptionService]
 })
 export class AdminModule {}
