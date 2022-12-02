@@ -25,7 +25,7 @@ export class Product {
   product_category_id: number;
 
   @Column({default: "[]"})
-  product_option_refs: string;
+  product_options: string;
 
   @Column({default: "[]"})
   image_refs: string;

@@ -17,7 +17,7 @@ export class UserAddress {
 
   @ManyToOne(() => User, (user) => user.addresses)
   @JoinColumn({name: 'user_id', referencedColumnName: 'id'})
-  user: User;
+  user_id: User;
 
   @CreateDateColumn()
   created_at: Date;

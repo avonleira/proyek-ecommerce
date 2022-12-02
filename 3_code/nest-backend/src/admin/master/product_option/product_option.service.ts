@@ -22,7 +22,10 @@ export class ProductOptionService {
   }
 
   async getById(id: number) {
-    const productOption = await this.productOptionRepository.findOneBy({id: id});
+    const productOption = await this.productOptionRepository.createQueryBuilder("product_option")
+      .leftJoinAndSelect('product_option.product_option_values', 'product_option_values')
+      .where("product_option.id = :id", { id: id })
+      .getOne();
     if (!productOption)
       throw new NotFoundException('Product option not found');
     return productOption;

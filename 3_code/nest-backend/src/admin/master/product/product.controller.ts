@@ -3,6 +3,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { RegexFileTypeValidator } from 'src/extensions/MulterRegexFileType.validator';
+import { BulkCreateProductInventoryDto } from './dtos/BulkCreateProductInventory.dto';
+import { BulkUpdateProductInventoryDto } from './dtos/BulkUpdateProductInventory.dto';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductService } from './product.service';
@@ -23,7 +25,8 @@ export class ProductController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':product_id')
   async getById(@Param('product_id', ParseIntPipe) id: number) {
-    return new SerializedProduct(await this.productService.getById(id));
+    // return new SerializedProduct(await this.productService.getById(id));
+    return await this.productService.getById(id);
   }
 
   @UsePipes(new ValidationPipe())
@@ -72,5 +75,28 @@ export class ProductController {
   @UsePipes(new ValidationPipe())
   async deleteProductImage(@Param('product_id', ParseIntPipe) product_id: number, @Param('image_id', ParseIntPipe) image_id: number) {
     return await this.productService.deleteProductImage(product_id, image_id)
+  }
+
+  @Get(':product_id/generate-varian') 
+  async generateProductOptionValue(@Param('product_id', ParseIntPipe) id:number) {
+    return await this.productService.generateProductOptionValue(id);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Post(':product_id/inventory') 
+  async bulkCreateProductInventory(
+    @Param('product_id', ParseIntPipe) id:number,
+    @Body() bulkCreateProductInventoryDto: BulkCreateProductInventoryDto  
+  ) {
+    return await this.productService.bulkCreateProductInventory(id, bulkCreateProductInventoryDto);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Put(':product_id/inventory') 
+  async bulkEditProductInventory(
+    @Param('product_id', ParseIntPipe) id:number,
+    @Body() bulkUpdateProductInventoryDto: BulkUpdateProductInventoryDto
+  ) {
+    return await this.productService.bulkEditProductInventory(id, bulkUpdateProductInventoryDto);
   }
 }

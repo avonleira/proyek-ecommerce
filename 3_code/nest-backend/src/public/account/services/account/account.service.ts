@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateUserDto } from 'src/account/dtos/UpdateUser.dto';
+import { UpdateUserDto } from 'src/public/account/dtos/UpdateUser.dto';
 import { User } from 'src/typeorm/entities/User';
 import { UserAddress } from 'src/typeorm/entities/UserAddress';
 import { Repository } from 'typeorm';

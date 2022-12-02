@@ -22,6 +22,9 @@ export class ProductInventory {
   @Column()
   price: number;
 
+  @Column({default: '[]'})
+  image_refs: string;
+
   @CreateDateColumn()
   created_at: Date;
 

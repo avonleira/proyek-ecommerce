@@ -39,6 +39,6 @@ export class User {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @OneToMany(() => UserAddress, (userAddress) => userAddress.user)
+  @OneToMany(() => UserAddress, (userAddress) => userAddress.user_id)
   addresses: UserAddress[];
 }
