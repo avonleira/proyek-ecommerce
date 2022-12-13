@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Double, ManyToOne, JoinColumn} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Double, ManyToOne, JoinColumn, OneToMany} from 'typeorm';
+import { Cart } from './Cart';
 import { Product } from './Product';
 
 @Entity({ name: 'product_inventory' })
@@ -9,9 +10,9 @@ export class ProductInventory {
   @Column({unique: true})
   SKU: string;
 
-  @ManyToOne(() => Product, (product) => product.product_inventory)
+  @ManyToOne(() => Product, (product) => product.product_inventories)
   @JoinColumn({name: 'product_id', referencedColumnName: 'id'})
-  product_id: number;
+  product: Product;
 
   @Column()
   combination_option: string;
@@ -33,4 +34,7 @@ export class ProductInventory {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => Cart, (cart) => cart.product_inventory)
+  carts: Cart[];
 }

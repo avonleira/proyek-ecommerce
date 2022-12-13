@@ -33,6 +33,8 @@ export class ProductService {
       .leftJoinAndSelect('product.product_category_id', 'product_category')
       .where('product.id = :id', {id: id})
       .getOne()
+      if(!product)
+      throw new NotFoundException('Product not found');
     const product_images = JSON.parse(product.image_refs).map((image) => `${process.env.END_POINT}/image/${String(image).split('/')[1]}`)
     return {...product, product_images}
   }
@@ -131,16 +133,18 @@ export class ProductService {
       const combination_option = JSON.stringify(product_inventory.combination_option);
       const image_refs = JSON.stringify(product_inventory.image_refs);
 
-      const result = await this.productInventoryRepository.find({
-        where: [
-          { combination_option: combination_option,
-            product_id: id
-          },
-          { 
-            SKU: product_inventory.SKU 
-          }
-        ]
-      })
+      const result = await this.productInventoryRepository.createQueryBuilder('pi')
+        .where('(combination_option=:co AND product_id=:p_id) OR sku=:sku', {co: combination_option, p_id: id, sku: product_inventory.SKU}).getMany()
+      // const result = await this.productInventoryRepository.find({
+      //   where: [
+      //     { combination_option: combination_option,
+      //       product: id
+      //     },
+      //     { 
+      //       SKU: product_inventory.SKU 
+      //     }
+      //   ]
+      // })
       if (result.length > 0)
         throw new BadRequestException('Duplicate product inventory / SKU')
 

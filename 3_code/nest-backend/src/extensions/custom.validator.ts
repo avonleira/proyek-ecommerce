@@ -56,4 +56,28 @@ export class MatchIfExistConstraint implements ValidatorConstraintInterface {
   }
 }
 
+//String or number
+export function IsNumberOrStringNumber(property?: any, validationOptions?: ValidationOptions) {
+  return (object: any, propertyName: string) => {
+      registerDecorator({
+          target: object.constructor,
+          propertyName,
+          options: validationOptions,
+          constraints: [property],
+          validator: IsNumberOrStringNumberConstraint,
+      });
+  };
+}
+
+@ValidatorConstraint({ name: 'IsNumberOrStringNumber'})
+export class IsNumberOrStringNumberConstraint implements ValidatorConstraintInterface {
+  validate(text: any, args: ValidationArguments) {
+    return !isNaN(text)
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return '($value) must be number or string number';
+  }
+}
+
 

@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, OneToMany } from 'typeorm';
+import { Cart } from './Cart';
 import { UserAddress } from './UserAddress';
 
 @Entity({ name: 'users' })
@@ -39,6 +40,9 @@ export class User {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @OneToMany(() => UserAddress, (userAddress) => userAddress.user_id)
+  @OneToMany(() => UserAddress, (userAddress) => userAddress.user)
   addresses: UserAddress[];
+  
+  @OneToMany(() => Cart, (cart) => cart.user)
+  carts: Cart[];
 }

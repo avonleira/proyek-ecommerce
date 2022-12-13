@@ -19,6 +19,7 @@ import { PageModule } from './page/page.module';
 import { Image } from './typeorm/entities/Image';
 import { ProductCategory } from './typeorm/entities/ProductCategory';
 import { UtilsModule } from './public/utils/utils.module';
+import { Cart } from './typeorm/entities/Cart';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { UtilsModule } from './public/utils/utils.module';
         Faq,
         PageProp,
         Image,
+        Cart,
       ],
       synchronize: true,
     }), 
@@ -52,6 +54,6 @@ import { UtilsModule } from './public/utils/utils.module';
     UtilsModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}

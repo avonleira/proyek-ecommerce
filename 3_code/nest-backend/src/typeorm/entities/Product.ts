@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, IsNull, ManyToMany, JoinTable, ManyToOne, JoinColumn} from 'typeorm';
+import { Cart } from './Cart';
 import { ProductCategory } from './ProductCategory';
 import { ProductInventory } from './ProductInventory';
 
@@ -33,8 +34,8 @@ export class Product {
   @Column({default: true})
   is_draft: boolean;
 
-  @OneToMany(() => ProductInventory, (productInventory) => productInventory.product_id)
-  product_inventory: ProductInventory[];
+  @OneToMany(() => ProductInventory, (productInventory) => productInventory.product)
+  product_inventories: ProductInventory[];
 
   @CreateDateColumn()
   created_at: Date;

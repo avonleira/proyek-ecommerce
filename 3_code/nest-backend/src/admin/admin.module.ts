@@ -26,8 +26,7 @@ import { ProductOptionService } from './master/product_option/product_option.ser
     ProductCategory,
     Image
   ])],
-  exports: [ProductService, ProductCategoryService, ProductOptionService],
   controllers: [ProductController, FaqController, ProductCategoryController, ProductOptionController],
-  providers: [ProductService, FaqService, ProductCategoryService, ProductOptionService]
+  providers: [ProductService, FaqService, ProductCategoryService, ProductOptionService],
 })
 export class AdminModule {}
