@@ -13,13 +13,10 @@ export class SerializedAuthUser {
 
   last_name: string;
 
-  @Exclude()
   gender: string;
 
-  @Exclude()
   phone_number: string;
 
-  @Exclude()
   @Transform(({value}) => new Date(value).toISOString().slice(0,10))
   date_birth: any;
 
