@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 
 import { User } from '../../../typeorm/entities/User';
-import { comparePassword } from '../../../utils/bcrypt';
+import { comparePassword, encodePassword } from '../../../utils/bcrypt';
 import { LoginDto } from '../dtos/Login.dto';
 import { RegisterDto } from '../dtos/Register.dto';
 
@@ -27,7 +27,7 @@ export class AuthService {
       const payload = {id: user.id, first_name: user.first_name, last_name: user.last_name}
 
       return {
-        access_token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET}),
+        token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET}), ...user
       }
     } else {
       throw new BadRequestException('Wrong credential')
@@ -40,9 +40,14 @@ export class AuthService {
       throw new BadRequestException('Email already exist');
     }
 
+    user.password = encodePassword(user.password);
     const create = await this.userRepository.create(user);
     const result = await this.userRepository.save(create);
   
-    return result;
+    const payload = {id: result.id, first_name: result.first_name, last_name: result.last_name}
+
+    return {
+      token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET}), ...result
+    }
   }
 }

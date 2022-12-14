@@ -23,6 +23,7 @@ import { PageProp } from './typeorm/entities/PageProp';
 import { Image } from './typeorm/entities/Image';
 import { ProductCategory } from './typeorm/entities/ProductCategory';
 import { Cart } from './typeorm/entities/Cart';
+import { Promo } from './typeorm/entities/Promo';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { Cart } from './typeorm/entities/Cart';
         PageProp,
         Image,
         Cart,
+        Promo,
       ],
       synchronize: true,
     }), 

@@ -15,6 +15,9 @@ import { ProductCategoryService } from './master/product_category/product_catego
 import { ProductCategory } from 'src/typeorm/entities/ProductCategory';
 import { ProductOptionController } from './master/product_option/product_option.controller';
 import { ProductOptionService } from './master/product_option/product_option.service';
+import { PromoController } from './master/promo/promo.controller';
+import { PromoService } from './master/promo/promo.service';
+import { Promo } from 'src/typeorm/entities/Promo';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
@@ -24,9 +27,10 @@ import { ProductOptionService } from './master/product_option/product_option.ser
     ProductOptionValue,
     ProductInventory,
     ProductCategory,
-    Image
+    Image,
+    Promo
   ])],
-  controllers: [ProductController, FaqController, ProductCategoryController, ProductOptionController],
-  providers: [ProductService, FaqService, ProductCategoryService, ProductOptionService],
+  controllers: [ProductController, FaqController, ProductCategoryController, ProductOptionController, PromoController],
+  providers: [ProductService, FaqService, ProductCategoryService, ProductOptionService, PromoService],
 })
 export class AdminModule {}

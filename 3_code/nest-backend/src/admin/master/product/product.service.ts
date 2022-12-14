@@ -33,10 +33,9 @@ export class ProductService {
       .leftJoinAndSelect('product.product_category_id', 'product_category')
       .where('product.id = :id', {id: id})
       .getOne()
-      if(!product)
+    if(!product)
       throw new NotFoundException('Product not found');
-    const product_images = JSON.parse(product.image_refs).map((image) => `${process.env.END_POINT}/image/${String(image).split('/')[1]}`)
-    return {...product, product_images}
+    return product;
   }
 
   async createProduct(createProductDto: CreateProductDto) {

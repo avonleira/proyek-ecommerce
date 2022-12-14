@@ -8,7 +8,8 @@ import { BulkUpdateProductInventoryDto } from './dtos/BulkUpdateProductInventory
 import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductService } from './product.service';
-import { SerializedProduct } from './serialization/SerializedProduct';
+import { SerializedGetAllProducts } from './serialization/SerializedGetAllProducts';
+import { SerializedGetProduct } from './serialization/SerializedGetProduct';
 
 @Controller('admin/master/produk')
 export class ProductController {
@@ -19,14 +20,15 @@ export class ProductController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async getAll() {
-    return this.productService.getAll();
+    const products = await this.productService.getAll();
+    return products.map((product) => new SerializedGetAllProducts(product))
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':product_id')
   async getById(@Param('product_id', ParseIntPipe) id: number) {
-    // return new SerializedProduct(await this.productService.getById(id));
-    return await this.productService.getById(id);
+    const product = await this.productService.getById(id);
+    return new SerializedGetProduct(product);
   }
 
   @UsePipes(new ValidationPipe())
