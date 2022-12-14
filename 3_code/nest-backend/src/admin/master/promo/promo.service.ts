@@ -1,8 +1,9 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, NotImplementedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Promo } from 'src/typeorm/entities/Promo';
 import { Repository } from 'typeorm';
 import { CreatePromoDto } from './dtos/CreatePromo.dto';
+import { updatePromoDto } from './dtos/UpdatePromo.dto';
 
 @Injectable()
 export class PromoService {
@@ -15,18 +16,33 @@ export class PromoService {
   }
 
   async getById(id: number) {
-    return await this.promoRepository.findOneBy({id: id})
+    const promo = await this.promoRepository.findOneBy({id: id})
+    if (!promo)
+      throw new NotFoundException("Promo not found")
+    return promo
   }
 
   async createPromo(createPromoDto: CreatePromoDto) {
-    throw new NotImplementedException();
+    return await this.promoRepository.save(createPromoDto);
   }
 
-  async editPromo() {
-    throw new NotImplementedException();
+  async editPromo(id: number, updatePromoDto: updatePromoDto) {
+    const promo = await this.promoRepository.findOneBy({id: id})
+    if (!promo)
+      throw new NotFoundException("Promo not found")
+    const result = await this.promoRepository.update({id: id}, updatePromoDto)
+    if (!result.affected)
+      throw new InternalServerErrorException("Failed to update")
+    return await this.promoRepository.findOneBy({id: id})
   }
 
-  async deletePromo() {
-    throw new NotImplementedException();
+  async deletePromo(id: number) {
+    const promo = await this.promoRepository.findOneBy({id: id})
+    if (!promo)
+      throw new NotFoundException("Promo not found")
+    const result = await this.promoRepository.delete({id: id})
+    if (!result.affected)
+      throw new InternalServerErrorException("Failed to delete")
+    return result
   }
 }

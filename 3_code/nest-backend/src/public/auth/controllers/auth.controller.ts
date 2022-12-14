@@ -1,4 +1,5 @@
-import { Controller, Post, Get, Request, UseGuards, ValidationPipe, UsePipes, Body, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { Controller, Post, Get, UseGuards, ValidationPipe, UsePipes, Body, UseInterceptors, ClassSerializerInterceptor, Res, Req } from '@nestjs/common';
+import { Request, response } from 'express';
 import { GeneralSerialization } from 'src/general/GeneralSerialization';
 import { LoginDto } from '../dtos/Login.dto';
 import { RegisterDto } from '../dtos/Register.dto';
@@ -15,18 +16,26 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return new GeneralSerialization(await this.authService.login(loginDto));
+  async login(@Body() loginDto: LoginDto, @Res({passthrough: true}) response, @Req() req: Request) {
+    const result = await this.authService.login(loginDto)
+    if (result) {
+      response.cookie('jwt', result.token, {httpOnly: true, domain: process.env.FRONTEND_DOMAIN,});
+    }
+    return new GeneralSerialization(result);
   }
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
-    return new SerializedRegister(await this.authService.register(registerDto));
+    const result = await this.authService.register(registerDto)
+    if (result) {
+      response.cookie('jwt', result.token, {httpOnly: true, domain: process.env.FRONTEND_DOMAIN,});
+    }
+    return new GeneralSerialization(result);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('protected')
-  getHello(@Request() req) {
+  getHello(@Req() req) {
     return req.user;
   }
 }
