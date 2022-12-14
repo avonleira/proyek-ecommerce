@@ -41,8 +41,6 @@ export class SerializedProfile {
 export class SerializedUserAddress {
   id: number;
 
-  post_code: string;
-
   address: string;
 
   is_default: boolean;

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, UploadedFiles, ParseFilePipe, FileTypeValidator, UsePipes, ValidationPipe, UploadedFile, Post, Param, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Get, Put, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, UploadedFiles, ParseFilePipe, FileTypeValidator, UsePipes, ValidationPipe, UploadedFile, Post, Param, ParseIntPipe, Req } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express/multer';
 
 import { RegexFileTypeValidator } from '../../../../extensions/MulterRegexFileType.validator';
@@ -9,6 +9,11 @@ import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
 import { SerializedProfile } from '../../serialization/SerializedProfile';
 import { JwtAuthGuard } from '../../../../public/auth/jwt-auth.guard';
 import { AccountService } from '../../services/account/account.service';
+import { GeneralSerialization } from 'src/general/GeneralSerialization';
+import { CreateAddressDto } from '../../dtos/CreateAddress.dto';
+import { UpdateAddressDto } from '../../dtos/UpdateAddress.dto';
+import { SerializedAddress } from '../../serialization/SerializedAddress';
+import { CheckoutCartDto } from '../../dtos/CheckoutCart.dto';
 
 @Controller('account')
 @UseGuards(JwtAuthGuard)
@@ -69,6 +74,14 @@ export class AccountController {
     return await this.accountService.getUserCart(req.user)
   }
 
+  @Post('/cart/checkout')
+  async checkoutCart(
+    @Request() req,
+    @Body() checkoutCartDto: CheckoutCartDto
+  ) {
+    return await this.accountService.checkoutCart(req.user, checkoutCartDto)
+  }
+
   @Post('/cart/:product_inventory_id')
   async addUserCart(
     @Request() req,
@@ -86,5 +99,42 @@ export class AccountController {
     if (req.body.full)
       return await this.accountService.deleteCart(req.user, id)
     return await this.accountService.decrementCart(req.user, id)
+  }
+
+  @Get('/address')
+  async getAddress(@Request() req) {
+    const addresses = await this.accountService.getUserAddress(req.user)
+    return addresses.map((address) => new SerializedAddress(address))
+  }
+
+  @Get('/address/:address_id')
+  async getAddressById(
+    @Request() req,
+    @Param('address_id', ParseIntPipe) id: number
+  ) {
+    const address = await this.accountService.getUserAddressById(req.user, id)
+    return new SerializedAddress(address)
+  }
+
+  @Post('/address')
+  async createAddress(
+    @Request() req,
+    @Body() createAddressDto: CreateAddressDto
+  ) {
+    return new SerializedAddress(await this.accountService.createAddress(req.user, createAddressDto))
+  }
+
+  @Put('/address/:address_id')
+  async updateAddress(
+    @Request() req,
+    @Param('address_id', ParseIntPipe) id: number,
+    @Body() updateAddressDto: UpdateAddressDto
+  ) {
+    return new SerializedAddress(await this.accountService.updateAddress(req.user, id, updateAddressDto))
+  }
+
+  @Delete('/address/:address_id')
+  async deleteAddress(@Param('address_id') id: number) {
+    return await this.accountService.deleteAddress(id);
   }
 }

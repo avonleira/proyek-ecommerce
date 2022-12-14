@@ -4,7 +4,7 @@ import { GeneralSerialization } from 'src/general/GeneralSerialization';
 import { LoginDto } from '../dtos/Login.dto';
 import { RegisterDto } from '../dtos/Register.dto';
 import { JwtAuthGuard } from '../jwt-auth.guard';
-import { SerializedRegister } from '../serialization/SerializedRegister';
+import { SerializedAuthUser } from '../serialization/SerializedAuthUser';
 import { AuthService } from '../services/auth.service';
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -27,7 +27,7 @@ export class AuthController {
     if (result) {
       response.cookie('ref_tok', result.ref_tok, { httpOnly: true, domain: process.env.FRONTEND_DOMAIN, maxAge: 86400000 });
     }
-    return new GeneralSerialization(result);
+    return new SerializedAuthUser(result);
   }
 
   @Post('refresh')
@@ -36,7 +36,7 @@ export class AuthController {
     if (result) {
       response.cookie('ref_tok', result.ref_tok, { httpOnly: true, domain: process.env.FRONTEND_DOMAIN, maxAge: 86400000 });
     }
-    return new GeneralSerialization(result);
+    return new SerializedAuthUser(result);
   }
 
   @Post('register')
@@ -45,7 +45,7 @@ export class AuthController {
     if (result) {
       response.cookie('ref_tok', result.ref_tok, { httpOnly: true, domain: process.env.FRONTEND_DOMAIN, maxAge: 86400000 });
     }
-    return new GeneralSerialization(result);
+    return new SerializedAuthUser(result);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -54,7 +54,7 @@ export class AuthController {
     response.cookie('ref_tok', null, {httpOnly: true, domain: process.env.FRONTEND_DOMAIN, maxAge: 1});
     return {message: "logged out"}
   }
-
+ 
   @UseGuards(JwtAuthGuard)
   @Get('protected')
   getHello(@Req() req) {

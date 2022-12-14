@@ -9,6 +9,9 @@ import * as fs from 'fs';
 import { Cart } from 'src/typeorm/entities/Cart';
 import { Product } from 'src/typeorm/entities/Product';
 import { ProductInventory } from 'src/typeorm/entities/ProductInventory';
+import { CreateAddressDto } from '../../dtos/CreateAddress.dto';
+import { UpdateAddressDto } from '../../dtos/UpdateAddress.dto';
+import { CheckoutCartDto } from '../../dtos/CheckoutCart.dto';
 @Injectable()
 export class AccountService {
   constructor(
@@ -105,5 +108,50 @@ export class AccountService {
     if (cart.qty <= 1) 
       return await this.cartRepository.delete(id)
     return await this.cartRepository.save({ ...cart, qty: cart.qty - 1 })
+  }
+
+  async getUserAddress(user: User) {
+    return await this.userAddressRepository.createQueryBuilder('address')
+      .where('user_id = :u_id', { u_id: user.id })
+      .getMany()
+  }
+
+  async getUserAddressById(user: User, id: number) {
+    return await this.userAddressRepository.createQueryBuilder('address')
+      .where('user_id=:u_id AND id=:id', { u_id: user.id, id: id })
+      .getOne()
+  }
+
+  async createAddress(user: User, createAddressDto: CreateAddressDto) {
+    if (createAddressDto.is_default)
+      await this.userAddressRepository.update({ user: user }, { is_default: false })
+    return await this.userAddressRepository.save({...createAddressDto, user: user});
+  }
+
+  async updateAddress(user: User, id: number, updateAddressDto: UpdateAddressDto) {
+    const address = await this.userAddressRepository.findOneBy({id: id})
+    if (!address)
+      throw new NotFoundException('Address not found')
+    if (updateAddressDto.is_default)
+      await this.userAddressRepository.update({ user: user }, { is_default: false })
+    const result = await this.userAddressRepository.update({id: id}, updateAddressDto);
+    if (!result.affected)
+      throw new InternalServerErrorException('Failed to update')
+    return await this.userAddressRepository.findOneBy({id: id})
+  }
+
+  async deleteAddress(id: number) {
+    const address = await this.userAddressRepository.findOneBy({id: id});
+    if (!address)
+      throw new NotFoundException('Address not found')
+    const result = await this.userAddressRepository.softDelete({ id });
+    if (!result.affected)
+      throw new BadRequestException('Failed to delete')
+    return result
+  }
+
+  async checkoutCart(user: User, checkoutCartDto: CheckoutCartDto) {
+    const promises = checkoutCartDto.carts.map((cart_id) => this.cartRepository.findOneBy({id: cart_id}))
+    return await Promise.all(promises);
   }
 }

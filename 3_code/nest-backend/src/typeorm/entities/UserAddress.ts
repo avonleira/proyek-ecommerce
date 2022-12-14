@@ -7,17 +7,17 @@ export class UserAddress {
   id: number;
 
   @Column()
-  post_code: string;
-
-  @Column()
   address: string;
 
-  @Column()
+  @Column({default: false})
   is_default: boolean;
 
   @ManyToOne(() => User, (user) => user.addresses)
   @JoinColumn({name: 'user_id', referencedColumnName: 'id'})
   user: User;
+
+  @Column()
+  city_id: number;
 
   @CreateDateColumn()
   created_at: Date;

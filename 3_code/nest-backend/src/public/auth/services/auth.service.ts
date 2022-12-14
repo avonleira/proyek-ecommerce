@@ -44,14 +44,15 @@ export class AuthService {
 
     user.password = encodePassword(user.password);
     const create = await this.userRepository.create(user);
-    const result = await this.userRepository.save(create);
+    const save = await this.userRepository.save(create);
+    const result = await this.userRepository.findOneBy({id: save.id})
   
-    const payload = {id: result.id, first_name: result.first_name, last_name: result.last_name}
+    const payload = {id: result.id, first_name: result.first_name, last_name: result.last_name,  profile_picture: result.profile_picture}
 
     return {
       ref_tok: this.jwtService.sign({id: payload.id}, {secret: process.env.JWT_SECRET}),
       token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET})
-      , ...user
+      , ...result
     }
   }
 

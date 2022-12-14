@@ -1,6 +1,7 @@
 import { Exclude, plainToClass, Transform } from "class-transformer";
 
-export class SerializedRegister {
+export class SerializedAuthUser {
+  @Exclude()
   id: number;
 
   email: string;
@@ -12,12 +13,15 @@ export class SerializedRegister {
 
   last_name: string;
 
+  @Exclude()
   gender: string;
 
+  @Exclude()
   phone_number: string;
 
+  @Exclude()
   @Transform(({value}) => new Date(value).toISOString().slice(0,10))
-  date_birth: Date;
+  date_birth: any;
 
   profile_picture: string;
 
@@ -30,7 +34,9 @@ export class SerializedRegister {
   @Exclude()
   deleted_at: Date;
 
-  constructor(partial: Partial<SerializedRegister>) {
+  @Exclude()
+  ref_tok: string;
+  constructor(partial: Partial<SerializedAuthUser>) {
     Object.assign(this, partial)
   }
 }
