@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from 'src/typeorm/entities/User';
-import { CreateUserParams, UpdateUserParams } from 'src/users/types/types';
-import { UserAddress } from 'src/typeorm/entities/UserAddress';
-import { encodePassword } from 'src/utils/bcrypt';
+
+import { encodePassword } from '../../../utils/bcrypt';
+import { User } from '../../../typeorm/entities/User';
+import { UserAddress } from '../../../typeorm/entities/UserAddress';
+import { CreateUserParams, UpdateUserParams } from '../../types/types';
 
 @Injectable()
 export class UsersService {

@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/typeorm/entities/User';
-import { comparePassword } from 'src/utils/bcrypt';
-import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { Repository } from 'typeorm';
+
+import { User } from '../../../typeorm/entities/User';
+import { comparePassword } from '../../../utils/bcrypt';
 import { LoginDto } from '../dtos/Login.dto';
 import { RegisterDto } from '../dtos/Register.dto';
 

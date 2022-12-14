@@ -1,9 +1,10 @@
 import { Param, Body, Controller, Get, Post, Put, UsePipes, ValidationPipe, ParseIntPipe, BadRequestException, NotImplementedException, Delete, NotFoundException, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
-import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
-import { UsersService } from 'src/users/services/users/users.service';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from 'src/users/dtos/UpdateUser.dto';
-import { User } from 'src/typeorm/entities/User';
+
+import { CreateUserDto } from '../../dtos/CreateUser.dto';
+import { UsersService } from '../../services/users/users.service';
+import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
+import { User } from '../../../typeorm/entities/User';
 
 @Controller('users')
 export class UsersController {

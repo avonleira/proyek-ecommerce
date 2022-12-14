@@ -1,13 +1,14 @@
 import { Body, Controller, Get, Put, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, Request, UploadedFiles, ParseFilePipe, FileTypeValidator, UsePipes, ValidationPipe, UploadedFile, Post, Param, ParseIntPipe } from '@nestjs/common';
-import { UpdateUserDto } from 'src/public/account/dtos/UpdateUser.dto';
-import { SerializedProfile } from 'src/public/account/serialization/SerializedProfile';
-import { AccountService } from 'src/public/account/services/account/account.service';
-import { JwtAuthGuard } from 'src/public/auth/jwt-auth.guard';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express/multer';
-import { RegexFileTypeValidator } from 'src/extensions/MulterRegexFileType.validator';
+
+import { RegexFileTypeValidator } from '../../../../extensions/MulterRegexFileType.validator';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { AddCartDto } from '../../dtos/AddCart.dto';
+import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
+import { SerializedProfile } from '../../serialization/SerializedProfile';
+import { JwtAuthGuard } from '../../../../public/auth/jwt-auth.guard';
+import { AccountService } from '../../services/account/account.service';
 
 @Controller('account')
 @UseGuards(JwtAuthGuard)

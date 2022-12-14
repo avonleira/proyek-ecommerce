@@ -1,24 +1,27 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './public/auth/auth.module';
+import { AccountModule } from './public/account/account.module';
+import { UtilsModule } from './public/utils/utils.module';
+import { AdminModule } from './admin/admin.module';
+import { PageModule } from './page/page.module';
+
 import { User } from './typeorm/entities/User';
 import { UserAddress } from './typeorm/entities/UserAddress';
-import { UsersModule } from './users/users.module';
-import { AccountModule } from './public/account/account.module';
-import { AuthModule } from './public/auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
 import { Product } from './typeorm/entities/Product';
 import { ProductOption } from './typeorm/entities/ProductOption';
 import { ProductOptionValue } from './typeorm/entities/ProductOptionValue';
 import { ProductInventory } from './typeorm/entities/ProductInventory';
-import { AdminModule } from './admin/admin.module';
 import { Faq } from './typeorm/entities/Faq';
 import { PageProp } from './typeorm/entities/PageProp';
-import { PageModule } from './page/page.module';
 import { Image } from './typeorm/entities/Image';
 import { ProductCategory } from './typeorm/entities/ProductCategory';
-import { UtilsModule } from './public/utils/utils.module';
 import { Cart } from './typeorm/entities/Cart';
 
 @Module({

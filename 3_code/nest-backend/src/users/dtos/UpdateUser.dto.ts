@@ -1,6 +1,6 @@
 import { IsNumberString, IsEnum, IsOptional, IsISO8601, ValidateIf, isNotEmpty, IsNotEmpty } from 'class-validator'
-import { MatchIfExist } from 'src/extensions/custom.validator';
-import { GenderType } from 'src/utils/enums';
+import { GenderType } from '../../utils/enums';
+import { MatchIfExist } from '../../extensions/custom.validator'
 
 export class UpdateUserDto {
   @ValidateIf(o => o.password != undefined)
