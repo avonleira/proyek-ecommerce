@@ -24,7 +24,7 @@ export class AuthService {
     const user = await this.userRepository.findOne({ where: {email: email}});
 
     if (user && comparePassword(password, user.password)) {
-      const payload = {id: user.id, first_name: user.first_name, last_name: user.last_name}
+      const payload = {id: user.id, first_name: user.first_name, last_name: user.last_name, profile_picture: user.profile_picture}
 
       return {
         token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET}), ...user
