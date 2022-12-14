@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 import { Cart } from './Cart';
 import { ProductCategory } from './ProductCategory';
 import { ProductInventory } from './ProductInventory';
+import { Wishlist } from './Wishlist';
 
 @Entity({ name: 'product' })
 export class Product {
@@ -45,4 +46,7 @@ export class Product {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.product)
+  wishlists: Wishlist[];
 }

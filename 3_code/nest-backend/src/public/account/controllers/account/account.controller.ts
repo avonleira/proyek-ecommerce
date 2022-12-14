@@ -137,4 +137,24 @@ export class AccountController {
   async deleteAddress(@Param('address_id') id: number) {
     return await this.accountService.deleteAddress(id);
   }
+  
+  @Get('wishlist')
+  async getUserWishlist(@Request() req) {
+    return await this.accountService.getUserWishlist(req.user)
+  }
+
+  @Get('wishlist/:id_product')
+  async cekWishlistProduct(@Request() req, @Param('id_product', ParseIntPipe) id_product:number) {
+    return await this.accountService.isWishlistProduct(req.user, id_product)
+  }
+
+  @Post('wishlist/:id_product')
+  async addWishlist(@Request() req, @Param('id_product', ParseIntPipe) id_product: number) {
+    return await this.accountService.addWishlist(req.user, id_product)
+  }
+
+  @Delete('wishlist/:id_wishlist')
+  async deleteWishlist(@Request() req, @Param('id_wishlist', ParseIntPipe) id_wishlist: number) {
+    return await this.accountService.deleteWishlist(id_wishlist)
+  }
 }

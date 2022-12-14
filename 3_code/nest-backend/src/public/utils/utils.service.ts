@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Image } from 'src/typeorm/entities/Image';
+import { ProductCategory } from 'src/typeorm/entities/ProductCategory';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UtilsService {
   constructor(
-    @InjectRepository(Image) private imageRepository: Repository<Image>
+    @InjectRepository(Image) private imageRepository: Repository<Image>,
+    @InjectRepository(ProductCategory) private productCategoryRepository: Repository<ProductCategory>
   ) {
     
   }
@@ -16,5 +18,9 @@ export class UtilsService {
     if (!image) 
       throw new NotFoundException('Image not found')
     return image;
+  }
+
+  async getCategories(){
+    return await this.productCategoryRepository.find()
   }
 }

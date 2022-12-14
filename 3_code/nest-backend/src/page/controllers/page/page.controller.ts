@@ -1,8 +1,8 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { PageService } from 'src/page/services/page/page.service';
 import { mockAboutUs } from 'src/mocks/about-us';
-import { mockPrivacyPolicy } from 'src/mocks/privacy-policy';
 import { mockTermsConditions } from 'src/mocks/terms-conditions';
+import { mockPrivacyPolicy } from 'src/mocks/privacy-policy';
 
 @Controller('page')
 export class PageController {
@@ -12,15 +12,22 @@ export class PageController {
   @Get('landing')
   async getLandingPage(){
     let pageProps = await this.pageService.getPageByPath("/page/landing")
-    
-    return {pageProps} 
+    let categories = await this.pageService.getCategories()
+    let showcase = await this.pageService.getShowcase()
+    return {pageProps, categories, showcase}
+  }
+
+  @Get('landing2')
+  async getLoggedLandingPage(){
+    let pageProps = await this.pageService.getPageByPath("/page/landing2")
+    return {pageProps}
   }
 
   @Get('about-us')
   async getAboutUsPage(){
     let pageProps = await this.pageService.getPageByPath("/page/about-us")
     let content = {...mockAboutUs}
-    return {...pageProps, ...content} 
+    return {pageProps, content} 
   }
 
   @Get('contact-us')
@@ -31,19 +38,37 @@ export class PageController {
   @Get('privacy-policy')
   async getPrivacyPolicyPage(){
     let pageProps = await this.pageService.getPageByPath("/page/privacy-policy")
-    let content = mockPrivacyPolicy
-    return {...pageProps, ...content}
+    let content = {...mockPrivacyPolicy}
+    return {pageProps, content}
   }
 
   @Get('terms-conditions')
   async getTermsConditionsPage(){
     let pageProps = await this.pageService.getPageByPath("/page/terms-conditions")
     let content = mockTermsConditions
-    return {...pageProps, ...content}
+    return {pageProps, content}
   }
   
   @Get('search-products')
-  async getSearchProduct(@Query('keyword') keyword: string){
-    return await this.pageService.getSearchedProducts(keyword)
+  async getSearchProductPage(@Query('keyword') keyword: string){
+    let pageProps = await this.pageService.getPageByPath("/page/search-products")
+    let content = await this.pageService.getSearchedProducts(keyword)
+    return {pageProps, content}
+  }
+
+  @Get('product/:id_product')
+  async getDetailProductPage(@Param('id_product', ParseIntPipe) id_product: number){
+    let pageProps = await this.pageService.getPageByPath("/page/product")
+    let content = await this.pageService.getDetailProduct(id_product)
+    return {pageProps, content}
+  }
+
+  @Get('discovery/:id_discovery')
+  async getDiscoveryPage(@Param('id_discovery', ParseIntPipe) id_discovery: number){
+    let pageProps = await this.pageService.getPageByPath("/page/discovery")
+    let discovery = await this.pageService.getEtalase(id_discovery)
+    let tags = await this.pageService.getTagged(id_discovery)
+    let products = await this.pageService.getTaggedProducts(tags)
+    return {pageProps, ...discovery, items: products}
   }
 }

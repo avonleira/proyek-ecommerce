@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, OneToMany } from 'typeorm';
 import { Cart } from './Cart';
 import { UserAddress } from './UserAddress';
+import { Wishlist } from './Wishlist';
 
 @Entity({ name: 'users' })
 export class User {
@@ -45,4 +46,7 @@ export class User {
   
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.product)
+  wishlists: Wishlist[];
 }

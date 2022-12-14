@@ -24,6 +24,9 @@ import { Image } from './typeorm/entities/Image';
 import { ProductCategory } from './typeorm/entities/ProductCategory';
 import { Cart } from './typeorm/entities/Cart';
 import { Promo } from './typeorm/entities/Promo';
+import { Etalase } from './typeorm/entities/Etalase';
+import { Tag } from './typeorm/entities/Tag';
+import { Wishlist } from './typeorm/entities/Wishlist';
 
 @Module({
   imports: [
@@ -48,6 +51,9 @@ import { Promo } from './typeorm/entities/Promo';
         Image,
         Cart,
         Promo,
+        Etalase,
+        Tag,
+        Wishlist,
       ],
       synchronize: true,
     }), 

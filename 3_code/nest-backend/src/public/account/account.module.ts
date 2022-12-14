@@ -14,6 +14,7 @@ import { ProductInventory } from '../../typeorm/entities/ProductInventory';
 import { ProductCategory } from '../../typeorm/entities/ProductCategory';
 import { ProductOption } from '../../typeorm/entities/ProductOption';
 import { ProductOptionValue } from '../../typeorm/entities/ProductOptionValue';
+import { Wishlist } from 'src/typeorm/entities/Wishlist';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -25,6 +26,7 @@ import { ProductOptionValue } from '../../typeorm/entities/ProductOptionValue';
       ProductCategory,
       ProductOption,
       ProductOptionValue,
+      Wishlist,
     ]),
     MulterModule.register({
       dest: './uploads/accounts',

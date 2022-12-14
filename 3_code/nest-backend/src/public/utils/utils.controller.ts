@@ -59,4 +59,9 @@ export class UtilsController {
       .catch((e) => e)
       .then((o) => o.data.rajaongkir.results)
   }
+  @Get('header-categories')
+  async getHeaderCategories(){
+    let categories = await this.utilsService.getCategories()
+    return {...categories}
+  }
 }

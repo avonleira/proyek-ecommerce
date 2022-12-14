@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import { Cart } from 'src/typeorm/entities/Cart';
 import { Product } from 'src/typeorm/entities/Product';
 import { ProductInventory } from 'src/typeorm/entities/ProductInventory';
+import { Wishlist } from 'src/typeorm/entities/Wishlist';
 import { CreateAddressDto } from '../../dtos/CreateAddress.dto';
 import { UpdateAddressDto } from '../../dtos/UpdateAddress.dto';
 import { CheckoutCartDto } from '../../dtos/CheckoutCart.dto';
@@ -20,6 +21,7 @@ export class AccountService {
     @InjectRepository(Cart) private readonly cartRepository:Repository<Cart>,
     @InjectRepository(Product) private readonly productRepository:Repository<Product>,
     @InjectRepository(ProductInventory) private readonly productInventoryRepository:Repository<ProductInventory>,
+    @InjectRepository(Wishlist) private readonly wishlistRepository:Repository<Wishlist>,
   ) {}
 
   async getUserProfile(id: number) {
@@ -153,5 +155,35 @@ export class AccountService {
   async checkoutCart(user: User, checkoutCartDto: CheckoutCartDto) {
     const promises = checkoutCartDto.carts.map((cart_id) => this.cartRepository.findOneBy({id: cart_id}))
     return await Promise.all(promises);
+  }
+  
+  async getUserWishlist(user: User) {
+    return await this.wishlistRepository.createQueryBuilder('wishlist').where('user_id=:id', {id: user.id}).getMany()
+  }
+
+  async isWishlistProduct(user: User, id_product: number){
+    let wishlist = await this.wishlistRepository.createQueryBuilder('w').where('product_id=:id', {id: id_product}).where('user_id=:id', {id: user.id}).getOne()
+    if(!wishlist) throw new NotFoundException("Product Not Wishlisted");
+    return true
+  }
+
+  async addWishlist(user: User, id_product: number){
+    const product = await this.productRepository.findOneBy({ id: id_product })
+    if (!product) throw new NotFoundException('Product not found!')
+
+    const wishlist = await this.wishlistRepository.createQueryBuilder('w').where('product_id=:id', {id: id_product}).where('user_id=:id', {id: user.id}).getOne()
+    if(wishlist) throw new BadRequestException("Product Already Wishlisted!")
+
+    return await this.wishlistRepository.save({user: user, product_id: id_product})
+  }
+
+  async deleteWishlist(id_wishlist: number){
+    const wishlist = await this.wishlistRepository.findOneBy({id: id_wishlist});
+    if (!wishlist)
+      throw new NotFoundException('Wishlist not found')
+    const result = await this.userAddressRepository.softDelete({ id: id_wishlist });
+    if (!result.affected)
+      throw new BadRequestException('Failed to delete')
+    return result
   }
 }
