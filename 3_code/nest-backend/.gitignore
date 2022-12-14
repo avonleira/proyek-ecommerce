@@ -40,4 +40,5 @@ yarn.lock
 
 # etc
 .env
+.env.local
 uploads
