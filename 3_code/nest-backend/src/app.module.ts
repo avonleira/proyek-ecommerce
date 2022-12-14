@@ -24,7 +24,6 @@ import { Image } from './typeorm/entities/Image';
 import { ProductCategory } from './typeorm/entities/ProductCategory';
 import { Cart } from './typeorm/entities/Cart';
 import { Promo } from './typeorm/entities/Promo';
-import { PrivacyPolicy } from './typeorm/entities/PrivacyPolicy';
 
 @Module({
   imports: [
@@ -49,7 +48,6 @@ import { PrivacyPolicy } from './typeorm/entities/PrivacyPolicy';
         Image,
         Cart,
         Promo,
-        PrivacyPolicy,
       ],
       synchronize: true,
     }), 
