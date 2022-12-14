@@ -12,6 +12,8 @@ import { AccountService } from '../../services/account/account.service';
 
 @Controller('account')
 @UseGuards(JwtAuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
+@UsePipes(new ValidationPipe({ transform: true }))
 export class AccountController {
 
   constructor(
@@ -38,7 +40,7 @@ export class AccountController {
       }
     })
   }))
-  @UsePipes(new ValidationPipe())
+
   @Put()
   async updateAccount(
     @UploadedFile(
@@ -55,7 +57,6 @@ export class AccountController {
       return new SerializedProfile(account);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Delete()
   async deleteAccount(@Request() req) {
     const account = await this.accountService.deleteAccount(req.user.id);
@@ -63,14 +64,11 @@ export class AccountController {
       return new SerializedProfile(account)
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/cart')
   async getUserCart(@Request() req) {
     return await this.accountService.getUserCart(req.user)
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/cart/:product_inventory_id')
   async addUserCart(
     @Request() req,
@@ -80,8 +78,6 @@ export class AccountController {
     return await this.accountService.addUserCart(req.user, product_inventory_id, addCartDto.count)
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(new ValidationPipe({ transform: true }))
   @Delete('/cart/:cart_id')
   async deleteOrDecrementCart(
     @Request() req,

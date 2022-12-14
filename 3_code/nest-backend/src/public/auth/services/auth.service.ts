@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
@@ -27,7 +27,9 @@ export class AuthService {
       const payload = {id: user.id, first_name: user.first_name, last_name: user.last_name}
 
       return {
-        token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET}), ...user
+        ref_tok: this.jwtService.sign({id: payload.id}, {secret: process.env.JWT_SECRET}),
+        token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET})
+        , ...user
       }
     } else {
       throw new BadRequestException('Wrong credential')
@@ -47,7 +49,24 @@ export class AuthService {
     const payload = {id: result.id, first_name: result.first_name, last_name: result.last_name}
 
     return {
-      token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET}), ...result
+      ref_tok: this.jwtService.sign({id: payload.id}, {secret: process.env.JWT_SECRET}),
+      token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET})
+      , ...user
+    }
+  }
+
+  async refresh(ref_tok: string) {
+    if(!ref_tok)
+      throw new BadRequestException('cannot refresh token')
+    const decode = Object(await this.jwtService.decode(ref_tok))
+    const user = await this.userRepository.findOneBy({id: decode.id})
+    if (!user)
+      throw new NotFoundException('User not found') 
+    const payload = {id: decode.id, first_name: decode.first_name, last_name: decode.last_name}
+    return {
+      ref_tok: this.jwtService.sign({id: payload.id}, {secret: process.env.JWT_SECRET}),
+      token: this.jwtService.sign(payload, {secret: process.env.JWT_SECRET})
+      , ...user
     }
   }
 }

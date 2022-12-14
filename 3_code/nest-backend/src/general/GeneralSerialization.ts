@@ -12,8 +12,11 @@ export class GeneralSerialization {
   @Exclude()
   password: string;
 
-  @Transform(({ value }) => JSON.parse(value).map((image) => `${process.env.END_POINT}/image/${String(image).split('/')[1]}`))
+  @Transform(({ value }) => JSON.parse(value).map((image) => `${process.env.END_POINT}/utils/image/${String(image).split('/')[1]}`))
   image_refs: string;
+
+  @Exclude()
+  ref_tok: any;
 
   constructor(partial: Partial<GeneralSerialization>) {
     Object.assign(this, partial)
