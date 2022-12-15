@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToClass } from 'class-transformer';
 import { Image } from 'src/typeorm/entities/Image';
 import { Product } from 'src/typeorm/entities/Product';
 import { ProductCategory } from 'src/typeorm/entities/ProductCategory';
@@ -15,7 +16,7 @@ import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
-    @InjectRepository(Product) private productCategory: Repository<ProductCategory>,
+    @InjectRepository(ProductCategory) private productCategoryRepository: Repository<ProductCategory>,
     @InjectRepository(ProductInventory) private productInventoryRepository: Repository<ProductInventory>,
     @InjectRepository(ProductOption) private productOptionRepository: Repository<ProductOption>,
     @InjectRepository(ProductOptionValue) private productOptionValueRepository: Repository<ProductOptionValue>,
@@ -29,10 +30,7 @@ export class ProductService {
   }
 
   async getById(id: number) {
-    const product =  await this.productRepository.createQueryBuilder('product')
-      .leftJoinAndSelect('product.product_category_id', 'product_category')
-      .where('product.id = :id', {id: id})
-      .getOne()
+    const product =  await this.productRepository.findOneBy({id: id})
     if(!product)
       throw new NotFoundException('Product not found');
     return product;
@@ -46,8 +44,11 @@ export class ProductService {
     const product = await this.productRepository.findOneBy({id:id})
     if(!product)
       throw new NotFoundException('Product not found');
+    const product_category = await this.productCategoryRepository.findOneBy({id: updateProductDto.productCategoryId})
+    if (!product_category)
+      throw new NotFoundException('Product category not found')
     const product_options = JSON.stringify(updateProductDto.product_options)
-    const result = await this.productRepository.update({id: id}, {is_draft: true, ...updateProductDto, product_options: product_options});
+    const result = await this.productRepository.update({id: id}, plainToClass(Product, {is_draft: true, ...updateProductDto, product_options: product_options, product_category: product_category, productCategoryId: undefined}));
     if (!result.affected)
       throw new InternalServerErrorException('Failed to update')
     return this.productRepository.findOneBy({id:id})
@@ -127,6 +128,9 @@ export class ProductService {
   }
 
   async bulkCreateProductInventory(id: number, bulkCreateProductInventoryDto: BulkCreateProductInventoryDto) {
+    const product = await this.productRepository.findOneBy({id: id})
+    if (!product)
+      throw new NotFoundException('Product not found');
     const product_inventories = []
     for (let index = 0; index < bulkCreateProductInventoryDto.product_inventories.length; index++) {
       const product_inventory = bulkCreateProductInventoryDto.product_inventories[index];
@@ -134,7 +138,7 @@ export class ProductService {
       const image_refs = JSON.stringify(product_inventory.image_refs.map((im) => `image/${im}`));
 
       const result = await this.productInventoryRepository.createQueryBuilder('pi')
-        .where('(combination_option=:co AND product_id=:p_id) OR sku=:sku', {co: combination_option, p_id: id, sku: product_inventory.SKU}).getMany()
+        .where('(combination_option=:co AND productId=:p_id) OR sku=:sku', {co: combination_option, p_id: id, sku: product_inventory.SKU}).getMany()
       // const result = await this.productInventoryRepository.find({
       //   where: [
       //     { combination_option: combination_option,
@@ -148,7 +152,7 @@ export class ProductService {
       if (result.length > 0)
         throw new BadRequestException('Duplicate product inventory / SKU')
 
-        product_inventories.push({...product_inventory, product_id: id, combination_option: combination_option, image_refs: image_refs})
+        product_inventories.push({...product_inventory, product: product, combination_option: combination_option, image_refs: image_refs})
     }
     try {
       return await this.productInventoryRepository.save(product_inventories)

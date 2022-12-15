@@ -80,7 +80,7 @@ export class AccountService {
     if (!product_inventory)
       throw new NotFoundException('Product not found!')
 
-    const cart = await this.cartRepository.createQueryBuilder('cart').where('user_id=:u_id AND product_inventory_id=:pi_id', {u_id: user.id, pi_id: product_inventory.id}).getOne()
+    const cart = await this.cartRepository.createQueryBuilder('cart').where('userId=:u_id AND productInventoryId=:pi_id', {u_id: user.id, pi_id: product_inventory.id}).getOne()
     if (cart) {
       const result = await this.cartRepository.update({id: cart.id}, { ...cart, qty: cart.qty + qty });
       if (result.affected > 0) {
@@ -124,13 +124,13 @@ export class AccountService {
 
   async getUserAddress(user: User) {
     return await this.userAddressRepository.createQueryBuilder('address')
-      .where('user_id = :u_id', { u_id: user.id })
+      .where('userId = :u_id', { u_id: user.id })
       .getMany()
   }
 
   async getUserAddressById(user: User, id: number) {
     return await this.userAddressRepository.createQueryBuilder('address')
-      .where('user_id=:u_id AND id=:id', { u_id: user.id, id: id })
+      .where('userId=:u_id AND id=:id', { u_id: user.id, id: id })
       .getOne()
   }
 
@@ -163,11 +163,11 @@ export class AccountService {
   }
   
   async getUserWishlist(user: User) {
-    return await this.wishlistRepository.createQueryBuilder('wishlist').where('user_id=:id', {id: user.id}).getMany()
+    return await this.wishlistRepository.createQueryBuilder('wishlist').where('userId:id', {id: user.id}).getMany()
   }
 
   async isWishlistProduct(user: User, id_product: number){
-    let wishlist = await this.wishlistRepository.createQueryBuilder('w').where('product_id=:id', {id: id_product}).where('user_id=:id', {id: user.id}).getOne()
+    let wishlist = await this.wishlistRepository.createQueryBuilder('w').where('productId:id', {id: id_product}).where('userId=:id', {id: user.id}).getOne()
     if(!wishlist) throw new NotFoundException("Product Not Wishlisted");
     return true
   }
@@ -176,7 +176,7 @@ export class AccountService {
     const product = await this.productRepository.findOneBy({ id: id_product })
     if (!product) throw new NotFoundException('Product not found!')
 
-    const wishlist = await this.wishlistRepository.createQueryBuilder('w').where('product_id=:id', {id: id_product}).where('user_id=:id', {id: user.id}).getOne()
+    const wishlist = await this.wishlistRepository.createQueryBuilder('w').where('productId=:id', {id: id_product}).where('userId=:id', {id: user.id}).getOne()
     if(wishlist) throw new BadRequestException("Product Already Wishlisted!")
 
     return await this.wishlistRepository.save({user: user, product_id: id_product})
@@ -200,7 +200,7 @@ export class AccountService {
     if (!getUser)
       throw new NotFoundException('User not found');
     var getPrecheckout = await this.preCheckoutRepository.createQueryBuilder('precheckout')
-      .where('user_id=:u_id', {u_id: user.id})
+      .where('userId=:u_id', {u_id: user.id})
       .getOne()
     if (!getPrecheckout || checkoutCartDto.carts.length > 0) {
       const cart_refs = checkoutCartDto.carts.map((cart) => { return { id: cart, is_checked: true } })
@@ -216,14 +216,14 @@ export class AccountService {
         await this.preCheckoutRepository.update({id: getPrecheckout.id},plainToClass(PreCheckout, precheckout));
       getPrecheckout = await this.preCheckoutRepository.createQueryBuilder('precheckout')
         .leftJoinAndSelect('precheckout.user_address', 'user_address')
-        .where('precheckout.user_id=:u_id', {u_id: user.id})
+        .where('precheckout.userId=:u_id', {u_id: user.id})
         .getOne()
     }
     
     const promises = JSON.parse(getPrecheckout.cart_refs).map(async (cart) => {
       const data = await this.cartRepository.createQueryBuilder('cart')
         .leftJoinAndSelect('cart.product_inventory', 'product_inventory')
-        .where('cart.user_id=:u_id AND cart.id=:c_id', {u_id: user.id, c_id: cart.id})
+        .where('cart.userId=:u_id AND cart.id=:c_id', {u_id: user.id, c_id: cart.id})
         .getOne()
       return {
         is_checked: cart.is_checked,
@@ -241,7 +241,7 @@ export class AccountService {
 
   async getAllReview(user: User) {
     return await this.reviewRepository.createQueryBuilder('review')
-      .where("user_id=:u_id", {u_id: user.id})
+      .where("userId=:u_id", {u_id: user.id})
       .getMany();
   }
 
@@ -250,7 +250,7 @@ export class AccountService {
     if (!dtrans) 
       throw new NotFoundException('Dtrans not found')
     const review = await this.reviewRepository.createQueryBuilder('review')
-      .where('review.dtrans_id=:d_id', {d_id: dtrans.id})
+      .where('review.dtransId=:d_id', {d_id: dtrans.id})
       .getOne()
     if (review)
       throw new BadRequestException('Already reviewed')

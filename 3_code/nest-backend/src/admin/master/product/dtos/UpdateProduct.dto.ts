@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { IsNumberString, IsEnum, IsOptional, IsISO8601, ValidateIf, isNotEmpty, IsNotEmpty, IsArray, ValidateNested, IsNumber } from 'class-validator'
 
 export class UpdateProductDto {
@@ -16,7 +16,7 @@ export class UpdateProductDto {
   weight: number;
 
   @IsNotEmpty()
-  product_category_id: number;
+  productCategoryId: number;
 
   @IsArray()
   @Type(() => ProductOptions)

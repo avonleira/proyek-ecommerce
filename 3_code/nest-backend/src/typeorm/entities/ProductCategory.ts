@@ -16,8 +16,8 @@ export class ProductCategory {
   @Column({ nullable: true })
   level: number;
 
-  @OneToMany(() => Product, (Product) => Product.product_category_id)
-  product: Product[];
+  @OneToMany(() => Product, (Product) => Product.product_category)
+  products: Product[];
 
   @CreateDateColumn()
   created_at: Date;
