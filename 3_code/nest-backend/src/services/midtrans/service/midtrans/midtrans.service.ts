@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import midtransClient from 'midtrans-client'
+import { midtransClient } from 'midtrans-client'
 import { Cart } from 'src/typeorm/entities/Cart';
 import { Product } from 'src/typeorm/entities/Product';
 import { ProductInventory } from 'src/typeorm/entities/ProductInventory';

@@ -118,9 +118,11 @@ const RegisterPage = (props: IProps) => {
         </div>
       </div>
       <div className="hidden md:block col-span-8 relative">
-        <div className="fixed h-screen w-full bg-primary-400">
-          {/* Tempat gambar */}
-          <img src={registerImage.src} alt="Gambar Regsiter Page | Duta Tech" />
+        <div className="fixed h-screen w-8/12 bg-primary-400">
+          <img
+            src={"/images/Register.jpg"} alt="Gambar Regsiter Page | Duta Tech"
+            className="w-full h-screen object-cover object-left"
+          />
         </div>
       </div>
     </div>

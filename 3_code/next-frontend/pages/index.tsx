@@ -24,7 +24,7 @@ const HomePage = (props: IProps) => {
   return (
     <MainLayout pageProps={pageProps}>
       <section id="landing-carousel" className="my-container py-3">
-        <Swiper className="mySwiper primarySwiper rounded"
+        <Swiper className="mySwiper primarySwiper rounded unselectable"
           loop={true} effect={"fade"}
           pagination={{ clickable: true }}
           navigation={true}
@@ -73,16 +73,6 @@ const HomePage = (props: IProps) => {
       </section>
     </MainLayout>
   )
-}
-
-export async function getServerSideProps() {
-  return {
-    props: {
-      pageProps: landingPageProps,
-      carousel: carouselItems,
-      etalase: mockEtalase,
-    },
-  }
 }
 
 interface ProductEtalaseSectionProps {
@@ -144,6 +134,16 @@ function ProductEtalaseSection(props: ProductEtalaseSectionProps) {
     </Swiper>
   </div>
   )
+}
+
+export async function getServerSideProps() {
+  return {
+    props: {
+      pageProps: landingPageProps,
+      carousel: carouselItems,
+      etalase: mockEtalase,
+    },
+  }
 }
 
 export default HomePage;
