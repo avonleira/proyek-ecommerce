@@ -9,6 +9,9 @@ export class Faq {
   question: string;
 
   @Column()
+  type: string;
+
+  @Column()
   answer: string;
 
   @CreateDateColumn()
