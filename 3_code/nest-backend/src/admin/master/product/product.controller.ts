@@ -28,7 +28,7 @@ export class ProductController {
   @Get(':product_id')
   async getById(@Param('product_id', ParseIntPipe) id: number) {
     const product = await this.productService.getById(id);
-    return new SerializedGetProduct(product);
+    return product;
   }
 
   @UsePipes(new ValidationPipe())

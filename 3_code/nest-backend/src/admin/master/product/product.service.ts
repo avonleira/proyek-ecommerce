@@ -48,7 +48,7 @@ export class ProductService {
     if (!product_category)
       throw new NotFoundException('Product category not found')
     const product_options = JSON.stringify(updateProductDto.product_options)
-    const result = await this.productRepository.update({id: id}, plainToClass(Product, {is_draft: true, ...updateProductDto, product_options: product_options, product_category: product_category, productCategoryId: undefined}));
+    const result = await this.productRepository.update({id: id}, plainToClass(Product, {is_draft: false, ...updateProductDto, product_options: product_options, product_category: product_category, productCategoryId: undefined}));
     if (!result.affected)
       throw new InternalServerErrorException('Failed to update')
     return this.productRepository.findOneBy({id:id})
