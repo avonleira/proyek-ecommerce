@@ -33,7 +33,17 @@ export class ProductService {
     const product =  await this.productRepository.findOneBy({id: id})
     if(!product)
       throw new NotFoundException('Product not found');
-    return product;
+    const promises = JSON.parse(product.product_options).map(async(po) => {
+      const product_option = await this.productOptionRepository.findOneBy({id: po.product_option})
+      const product_option_value = []
+      for (let i = 0; i < po.product_option_value.length; i++) {
+        const e = po.product_option_value[i];
+        product_option_value.push(await this.productOptionValueRepository.findOneBy({id: e}))
+      }
+      return {product_option, product_option_value}
+    })
+    const product_option = await Promise.all(promises);
+    return {product, product_option};
   }
 
   async createProduct(createProductDto: CreateProductDto) {
@@ -41,17 +51,31 @@ export class ProductService {
   }
 
   async editProduct(id: number, updateProductDto: UpdateProductDto) {
-    const product = await this.productRepository.findOneBy({id:id})
+    var product = await this.productRepository.findOneBy({id:id})
     if(!product)
       throw new NotFoundException('Product not found');
     const product_category = await this.productCategoryRepository.findOneBy({id: updateProductDto.productCategoryId})
     if (!product_category)
       throw new NotFoundException('Product category not found')
     const product_options = JSON.stringify(updateProductDto.product_options)
-    const result = await this.productRepository.update({id: id}, plainToClass(Product, {is_draft: true, ...updateProductDto, product_options: product_options, product_category: product_category, productCategoryId: undefined}));
+    const result = await this.productRepository.update({id: id}, plainToClass(Product, {is_draft: false, ...updateProductDto, product_options: product_options, product_category: product_category, productCategoryId: undefined}));
     if (!result.affected)
       throw new InternalServerErrorException('Failed to update')
-    return this.productRepository.findOneBy({id:id})
+
+   var product =  await this.productRepository.findOneBy({id: id})
+    if(!product)
+      throw new NotFoundException('Product not found');
+    const promises = JSON.parse(product.product_options).map(async(po) => {
+      const product_option = await this.productOptionRepository.findOneBy({id: po.product_option})
+      const product_option_value = []
+      for (let i = 0; i < po.product_option_value.length; i++) {
+        const e = po.product_option_value[i];
+        product_option_value.push(await this.productOptionValueRepository.findOneBy({id: e}))
+      }
+      return {product_option, product_option_value}
+    })
+    const product_option = await Promise.all(promises);
+    return {product, product_option};
   }
 
   async deleteProduct(id: number) {

@@ -249,11 +249,12 @@ export class AccountService {
     const dtrans = await this.dtransRepository.findOneBy({id: createReviewDto.dtrans_id});
     if (!dtrans) 
       throw new NotFoundException('Dtrans not found')
+    const product = await this.productRepository.findOneBy({id: dtrans.product.id})
     const review = await this.reviewRepository.createQueryBuilder('review')
       .where('review.dtransId=:d_id', {d_id: dtrans.id})
       .getOne()
     if (review)
       throw new BadRequestException('Already reviewed')
-    return await this.reviewRepository.save({...createReviewDto, dtrans:dtrans})
+    return await this.reviewRepository.save({...createReviewDto, dtrans:dtrans, user: user, product: product, dtrans_id: undefined})
   }
 }
