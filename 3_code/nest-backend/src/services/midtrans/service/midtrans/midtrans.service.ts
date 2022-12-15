@@ -8,12 +8,12 @@ import { User } from 'src/typeorm/entities/User';
 import { Repository } from 'typeorm';
 
 interface IMidtransNotifResponse {
-  transaction_id: string
+  order_id: string
   transaction_status: number
   status_code: 200|500
 }
 interface IMidtransCreateTransactionResponse {
-  transaction_id: string
+  order_id: string
   payment_url: string
 }
 
@@ -25,7 +25,7 @@ export class MidtransService {
     @InjectRepository(Product) private readonly productRepository:Repository<Product>,
   ) {}
 
-  async createTransaction(list_cart: Array<Cart>, user: User, id_transaction: string, total: number){
+  async createTransaction(list_cart: Array<Cart>, user: User, id_order: string, total: number){
     let snap = new midtransClient.Snap({
       isProduction : false,
       serverKey : `${process.env.MIDTRANS_SERVER_KEY}`,
@@ -33,7 +33,7 @@ export class MidtransService {
     });
     return new Promise<IMidtransCreateTransactionResponse>(async (resolve, reject) => {
       let transaction_details = {
-        'order_id': id_transaction,
+        'order_id': id_order,
         'gross_amount': total
       }
       let item_details = []
@@ -58,7 +58,7 @@ export class MidtransService {
       snap.createTransaction({ transaction_details, item_details, customer_details })
         .then((transaction)=>{
           let redirectUrl = transaction.redirect_url;
-          return resolve({transaction_id: id_transaction, payment_url: redirectUrl}) 
+          return resolve({order_id: id_order, payment_url: redirectUrl}) 
         })
         .catch((error)=>{
           return reject({ message: error.message });
@@ -89,7 +89,7 @@ export class MidtransService {
           } else if (transactionStatus == 'pending'){
               status = 0
           }
-          return resolve({ transaction_id: orderId, transaction_status: status, status_code: 200});
+          return resolve({ order_id: orderId, transaction_status: status, status_code: 200});
         })
         .catch((error)=>{
           return reject({ message: error.message });
@@ -120,7 +120,7 @@ export class MidtransService {
           } else if (transactionStatus == 'pending'){
               status = 0
           }
-          return resolve({ transaction_id: orderId, transaction_status: status, status_code: 200});
+          return resolve({ order_id: orderId, transaction_status: status, status_code: 200});
         })
         .catch((error)=>{
           return reject({ message: error.message });
