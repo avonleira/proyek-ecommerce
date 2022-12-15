@@ -14,12 +14,7 @@ export class SerializedGetProduct extends GeneralSerialization{
 
   is_draft: boolean;
 
-  @Exclude()
-  product_options: string;
-
-  @Expose({name: "product_category"})
-  @Transform(({value}) => new GeneralSerialization(value))
-  product_category_id: any;
+  product_options: any;
 
   constructor(partial: Partial<SerializedGetProduct>) {
     super(partial);

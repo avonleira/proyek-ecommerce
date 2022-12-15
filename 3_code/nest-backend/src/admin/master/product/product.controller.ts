@@ -1,8 +1,10 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseFilePipe, ParseIntPipe, Post, Put, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { plainToClass } from 'class-transformer';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { RegexFileTypeValidator } from 'src/extensions/MulterRegexFileType.validator';
+import { GeneralSerialization } from 'src/general/GeneralSerialization';
 import { BulkCreateProductInventoryDto } from './dtos/BulkCreateProductInventory.dto';
 import { BulkUpdateProductInventoryDto } from './dtos/BulkUpdateProductInventory.dto';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
@@ -27,8 +29,9 @@ export class ProductController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':product_id')
   async getById(@Param('product_id', ParseIntPipe) id: number) {
-    const product = await this.productService.getById(id);
-    return product;
+    const result = await this.productService.getById(id);
+    const image_refs = JSON.parse(result.product.image_refs).map((image) => `${process.env.END_POINT}/utils/image/${String(image).split('/')[1]}`)
+    return {...result.product, product_options: result.product_option, image_refs: image_refs};
   }
 
   @UsePipes(new ValidationPipe())
@@ -40,7 +43,9 @@ export class ProductController {
   @UsePipes(new ValidationPipe())
   @Put(':product_id')
   async editProduct(@Param('product_id', ParseIntPipe) id: number, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.editProduct(id, updateProductDto);
+    const result = await this.productService.editProduct(id, updateProductDto);
+    const image_refs = JSON.parse(result.product.image_refs).map((image) => `${process.env.END_POINT}/utils/image/${String(image).split('/')[1]}`)
+    return {...result.product, product_options: result.product_option, image_refs: image_refs};
   }
 
   @Delete(':product_id')
