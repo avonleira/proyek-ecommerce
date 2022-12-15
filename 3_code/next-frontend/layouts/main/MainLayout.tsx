@@ -10,6 +10,7 @@ interface IProps {
   pageProps?: PagePropsInterface
   className?: string
   bodyNoMinHeight?: boolean
+  noPaddingTop?: boolean
   children?: JSX.Element | any
 }
 
@@ -47,7 +48,7 @@ function MainLayout(props: IProps) {
         <div className="fixed top-0 bottom-0 left-0 right-0 bg-black opacity-50 z-10" />
       ) : null }
       <MainHeader refElement={headerRef} setOpenBackdrop={setOpenBackdrop} />
-      <main className={`${props.bodyNoMinHeight?"":"min-h-screen"} pt-12 md:pt-28`}>
+      <main className={`${props.bodyNoMinHeight?"":"min-h-screen"} ${props.noPaddingTop?"":"pt-12 md:pt-28"}`}>
       {/* <main className={`pt-[${document?.getElementById("header")?.offsetHeight ?? 100}]`}> */}
         {props.children}
       </main>

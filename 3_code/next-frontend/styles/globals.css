@@ -13,6 +13,24 @@
     transition: 0.3s;
   }
 
+  .unselectable {
+    @apply touch-none select-none;
+    /* -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; */
+  }
+
+  .hide-updown-arrow::-webkit-outer-spin-button,
+  .hide-updown-arrow::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield;
+  }
+
+
   /* Custom Elements */
   .brand-logo {
     @apply font-[Gugi] text-primary-500 text-xl md:text-2xl lg:text-3xl xl:text-4xl
@@ -39,6 +57,25 @@
   }
   .primarySwiper .swiper-button-prev {
     @apply text-primary-500 animate-fade-in !important;
+  }
+
+  .whiteSwiper {
+    --swiper-navigation-color: rgb(253 132 31);
+    --swiper-pagination-color: rgb(253 132 31);
+    --swiper-navigation-size: 1.5rem;
+  }
+  .whiteSwiper .swiper-slide {
+    /* @apply opacity-40; */
+  }
+  .whiteSwiper .swiper-slide-thumb-active {
+    /* @apply opacity-100; */
+    @apply rounded-md shadow-md shadow-black;
+  }
+  .whiteSwiper .swiper-button-next {
+    @apply rounded right-0.5 p-1
+  }
+  .whiteSwiper .swiper-button-prev {
+    @apply rounded left-0.5 p-1
   }
   
   .whiteNavigation .swiper-button-next {

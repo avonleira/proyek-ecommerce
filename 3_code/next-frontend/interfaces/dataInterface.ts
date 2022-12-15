@@ -19,6 +19,10 @@ export interface IProduct {
   images: ImageInterface[]
   // details?: {
     price: number
+    discount?: {
+      type: "percentage"|"exact"
+      value: number
+    }
     condition?: "new"|"second"
     weight?: {
       type: "mg"|"g"|"kg"|string

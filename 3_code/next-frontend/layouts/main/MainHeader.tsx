@@ -4,6 +4,7 @@ import { useState, useEffect, MutableRefObject } from "react";
 import { useForm } from "react-hook-form";
 
 import { headerTopSubNavItems, headerBestSubCatItems } from "../../data/staticData";
+import { useAuth } from "../../hooks/authHook";
 import { getRandomSearchKeyword } from "../../utils/textHelper";
 
 interface IProps {
@@ -14,12 +15,17 @@ interface IProps {
 
 function MainHeader(props: IProps) {
   const router = useRouter();
-  const userNow = router.query?.user;
+  const { userNow, LogoutBackend } = useAuth();
+  // console.log("userNow", userNow)
   const [openCatBar, setOpenCatBar] = useState<boolean>(false);
   const [inputPh, setInputPh] = useState<string>("");
   const [bestSubCat, setBestSubCat] = useState<typeof headerBestSubCatItems>([]);
 
-  const searchFormHook = useForm();
+  const searchFormHook = useForm({
+    defaultValues: {
+      keywords: router.pathname=="/search"?router.query.q??"":"",
+    }
+  });
 
   const InputSearchProps = {
     type: "text", placeholder: inputPh, required: true,
@@ -27,7 +33,8 @@ function MainHeader(props: IProps) {
   }
 
   const searchFromSubmit = async (data: any) => {
-    console.log(data)
+    // console.log(data)
+    router.push(`/search?q=${data.keywords}`)
   }
 
   useEffect(() => {
@@ -105,15 +112,21 @@ function MainHeader(props: IProps) {
               <div className={`hidden md:block ${userNow?"md:col-span-3":"md:col-span-2"}`}>
                 { userNow ? (
                   <div className="w-full flex flex-row flex-wrap justify-start pt-1 gap-1 px-1">
-                    <button className="py-1 px-2 rounded text-gray-500 hover:bg-zinc-200"><i className="bi bi-cart-fill"></i></button>
-                    <button className="py-1 px-2 rounded text-gray-500 hover:bg-zinc-200"><i className="bi bi-bell-fill"></i></button>
-                    <button className="py-1 px-2 rounded text-gray-500 hover:bg-zinc-200"><i className="bi bi-envelope-fill"></i></button>
+                    <button className="py-1 px-2 rounded text-gray-500 hover:bg-zinc-200" onClick={() => router.push("/cart")}>
+                      <i className="bi bi-cart-fill"></i>
+                    </button>
+                    <button className="py-1 px-2 rounded text-gray-500 hover:bg-zinc-200">
+                      <i className="bi bi-bell-fill"></i>
+                    </button>
+                    <button className="py-1 px-2 rounded text-gray-500 hover:bg-zinc-200">
+                      <i className="bi bi-envelope-fill"></i>
+                    </button>
                     {/* <div className="h-8 border mx-1"></div> */}
                     <div className="h-8 w-[1.2px] bg-gray-300 mx-1"></div>
-                    <button className="flex-1 py-1 px-2 rounded hover:bg-zinc-200 text-left">
+                    <button className="flex-1 py-1 px-2 rounded hover:bg-zinc-200 text-left" onClick={() => router.push("/account/settings")}>
                       <div className="flex flex-row items-center gap-2">
-                        <img src="/images/michaelachel-profile-pic.png" className="rounded w-6 h-6" />
-                        <span className="text-sm">Ariel</span>
+                        <img src={userNow.profile_picture} alt="..." className="rounded w-6 h-6" />
+                        <span className="text-sm">{userNow.first_name}</span>
                       </div>
                     </button>
                   </div>

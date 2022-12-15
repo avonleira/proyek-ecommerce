@@ -1,22 +1,25 @@
 import Link from "next/link";
-import { type } from "os";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import MyNextHead from "../../components/MyNextHead";
-import { loginPageProps } from "../../data/pageProps";
-import loginImage from "../../public/images/Selamat_Datang.jpg";
+import { PagePropsInterface, loginPageProps } from "../../data/pageProps";
+import { useAuth } from "../../hooks/authHook";
 
 interface IProps {
-  pageProps: typeof loginPageProps
+  pageProps: PagePropsInterface
 }
 
 
 const LoginPage = (props: IProps) => {
+  const router = useRouter()
+  const { LoginBackend } = useAuth();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showHint, setShowHint] = useState<boolean>(false);
-  const loginFormHook = useForm();
   
+  const loginFormHook = useForm();
   const InputEmailProps = {
     placeholder: "Email", type: "email", required: true,
     // error: stringIncludeArray(FirebaseError?.code ?? "", ["email", "user"]),
@@ -31,7 +34,14 @@ const LoginPage = (props: IProps) => {
   }
 
   const loginFormSubmit = async (data: any) => {
-    console.log(data)
+    // console.log(data)
+    setIsLoading(true)
+    await LoginBackend(data.email, data.password)
+    .then(res => {
+      router.replace("/")
+    })
+    .catch(err => {})
+    .finally(() => setIsLoading(false))
   }
 
   return (
@@ -82,9 +92,11 @@ const LoginPage = (props: IProps) => {
         </div>
       </div>
       <div className="hidden md:block col-span-8 relative">
-        <div className="fixed h-screen w-full bg-primary-400">
-          {/* Tempat gambar */}
-          <img src={loginImage.src} alt="Gambar Login Page | Duta Tech" />
+        <div className="fixed h-screen w-8/12 bg-primary-400">
+          <img
+            src={"/images/Selamat_Datang.jpg"} alt="Gambar Login Page | Duta Tech"
+            className="w-full h-screen object-cover object-left"
+          />
         </div>
       </div>
     </div>
