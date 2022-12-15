@@ -33,6 +33,8 @@ import { Htrans } from './typeorm/entities/Htrans';
 import { Dtrans } from './typeorm/entities/Dtrans';
 import { Review } from './typeorm/entities/Review';
 import { PreCheckout } from './typeorm/entities/PreCheckout';
+import { Connection } from 'typeorm';
+import { ProductView } from './typeorm/entities/ProductView';
 
 @Module({
   imports: [
@@ -63,7 +65,8 @@ import { PreCheckout } from './typeorm/entities/PreCheckout';
         Htrans,
         Dtrans,
         Review,
-        PreCheckout
+        PreCheckout,
+        ProductView
       ],
       synchronize: true,
     }),

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, Request } from '@nestjs/common';
 import { PageService } from 'src/page/services/page/page.service';
 import { mockAboutUs } from 'src/mocks/about-us';
 import { mockTermsConditions } from 'src/mocks/terms-conditions';
@@ -49,17 +49,17 @@ export class PageController {
     return {pageProps, content}
   }
   
-  @Get('search-products')
-  async getSearchProductPage(@Query('keyword') keyword: string){
+  @Get('search-product')
+  async getSearchProductPage(@Request() req){
     let pageProps = await this.pageService.getPageByPath("/page/search-products")
-    let content = await this.pageService.getSearchedProducts(keyword)
+    let content = await this.pageService.getSearchedProducts(req.query.q, req.query.tsr, req.query.pmin, req.query.pmax, req.query.sort)
     return {pageProps, content}
   }
 
   @Get('product/:id_product')
-  async getDetailProductPage(@Param('id_product', ParseIntPipe) id_product: number){
+  async getDetailProductPage(@Request() req,@Param('id_product', ParseIntPipe) id_product: number){
     let pageProps = await this.pageService.getPageByPath("/page/product")
-    let content = await this.pageService.getDetailProduct(id_product)
+    let content = await this.pageService.getDetailProduct(id_product, req.user)
     return {pageProps, content}
   }
 

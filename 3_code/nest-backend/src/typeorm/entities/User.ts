@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 import { Cart } from './Cart';
 import { Htrans } from './Htrans';
 import { PreCheckout } from './PreCheckout';
+import { ProductView } from './ProductView';
 import { Review } from './Review';
 import { UserAddress } from './UserAddress';
 import { Wishlist } from './Wishlist';
@@ -58,4 +59,7 @@ export class User {
 
   @OneToMany(() => Review, (review) => review.product)
   reviews: Review[];
+
+  @OneToMany(() => ProductView, (product_view) => product_view.user)
+  product_views: ProductView[];
 }

@@ -3,6 +3,7 @@ import { Cart } from './Cart';
 import { Dtrans } from './Dtrans';
 import { ProductCategory } from './ProductCategory';
 import { ProductInventory } from './ProductInventory';
+import { ProductView } from './ProductView';
 import { Review } from './Review';
 import { Wishlist } from './Wishlist';
 
@@ -56,4 +57,7 @@ export class Product {
 
   @OneToMany(() => Dtrans, (dtrans) => dtrans.product)
   dtrans: Dtrans[];
+
+  @OneToMany(() => ProductView, (product_view) => product_view.product)
+  product_views: ProductView[];
 }
