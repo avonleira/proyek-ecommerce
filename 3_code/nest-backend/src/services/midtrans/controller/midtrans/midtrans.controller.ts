@@ -1,4 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { MidtransService } from '../../service/midtrans/midtrans.service';
 
 @Controller('midtrans')
-export class MidtransController {}
+export class MidtransController {
+    constructor(
+        private midtransService: MidtransService
+    ){}
+}
