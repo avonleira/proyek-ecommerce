@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, IsNull, ManyToMany, JoinTable, ManyToOne, JoinColumn} from 'typeorm';
 import { Cart } from './Cart';
+import { Dtrans } from './Dtrans';
 import { ProductCategory } from './ProductCategory';
 import { ProductInventory } from './ProductInventory';
 import { Wishlist } from './Wishlist';
@@ -49,4 +50,7 @@ export class Product {
 
   @OneToMany(() => Wishlist, (wishlist) => wishlist.product)
   wishlists: Wishlist[];
+
+  @OneToMany(() => Dtrans, (dtrans) => dtrans.product)
+  dtrans: Dtrans[];
 }

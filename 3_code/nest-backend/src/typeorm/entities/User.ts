@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, OneToMany } from 'typeorm';
 import { Cart } from './Cart';
+import { Htrans } from './Htrans';
 import { UserAddress } from './UserAddress';
 import { Wishlist } from './Wishlist';
 
@@ -47,6 +48,9 @@ export class User {
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];
 
-  @OneToMany(() => Wishlist, (wishlist) => wishlist.product)
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.user)
   wishlists: Wishlist[];
+
+  @OneToMany(() => Htrans, (htrans) => htrans.user)
+  htrans: Htrans[];
 }

@@ -27,6 +27,10 @@ import { Promo } from './typeorm/entities/Promo';
 import { Etalase } from './typeorm/entities/Etalase';
 import { Tag } from './typeorm/entities/Tag';
 import { Wishlist } from './typeorm/entities/Wishlist';
+import { MidtransService } from './services/midtrans/service/midtrans/midtrans.service';
+import { MidtransController } from './services/midtrans/controller/midtrans/midtrans.controller';
+import { Htrans } from './typeorm/entities/Htrans';
+import { Dtrans } from './typeorm/entities/Dtrans';
 
 @Module({
   imports: [
@@ -54,9 +58,15 @@ import { Wishlist } from './typeorm/entities/Wishlist';
         Etalase,
         Tag,
         Wishlist,
+        Htrans,
+        Dtrans,
       ],
       synchronize: true,
-    }), 
+    }),
+    TypeOrmModule.forFeature([
+      Product,
+      ProductInventory,
+    ]),
     UsersModule,
     AccountModule,
     AuthModule,
@@ -64,7 +74,7 @@ import { Wishlist } from './typeorm/entities/Wishlist';
     PageModule,
     UtilsModule
   ],
-  controllers: [AppController],
-  providers: [AppService]
+  controllers: [AppController, MidtransController],
+  providers: [AppService, MidtransService]
 })
 export class AppModule {}

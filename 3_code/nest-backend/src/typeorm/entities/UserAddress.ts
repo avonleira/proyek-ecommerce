@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Htrans } from './Htrans';
 import { User } from './User';
 
 @Entity({ name: 'user_address' })
@@ -27,4 +28,7 @@ export class UserAddress {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => Htrans, (htrans) => htrans.user)
+  htrans: Htrans[];
 }
