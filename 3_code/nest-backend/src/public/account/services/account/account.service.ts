@@ -18,6 +18,7 @@ import { CreateReviewDto } from '../../dtos/CreateReview.dto';
 import { PreCheckout } from 'src/typeorm/entities/PreCheckout';
 import { plainToClass } from 'class-transformer';
 import { ProductOptionValue } from 'src/typeorm/entities/ProductOptionValue';
+import { Dtrans } from 'src/typeorm/entities/Dtrans';
 @Injectable()
 export class AccountService {
   constructor(
@@ -30,6 +31,7 @@ export class AccountService {
     @InjectRepository(Review) private readonly reviewRepository:Repository<Review>,
     @InjectRepository(PreCheckout) private readonly preCheckoutRepository:Repository<PreCheckout>,
     @InjectRepository(ProductOptionValue) private readonly productOptionValueRepository:Repository<ProductOptionValue>,
+    @InjectRepository(Dtrans) private readonly dtransRepository:Repository<Dtrans>,
   ) {}
 
   async getUserProfile(id: number) {
@@ -70,7 +72,7 @@ export class AccountService {
   }
 
   async getUserCart(user: User) {
-    return await this.cartRepository.createQueryBuilder('cart').where('user_id=:id', {id: user.id}).getMany()
+    return await this.cartRepository.findOne({where: {id:10}})
   }
 
   async addUserCart(user: User, product_inventory_id: number, qty: number) {
@@ -244,6 +246,14 @@ export class AccountService {
   }
 
   async createReview(user: User, createReviewDto: CreateReviewDto) {
-    return 0;
+    const dtrans = await this.dtransRepository.findOneBy({id: createReviewDto.dtrans_id});
+    if (!dtrans) 
+      throw new NotFoundException('Dtrans not found')
+    const review = await this.reviewRepository.createQueryBuilder('review')
+      .where('review.dtrans_id=:d_id', {d_id: dtrans.id})
+      .getOne()
+    if (review)
+      throw new BadRequestException('Already reviewed')
+    return await this.reviewRepository.save({...createReviewDto, dtrans:dtrans})
   }
 }

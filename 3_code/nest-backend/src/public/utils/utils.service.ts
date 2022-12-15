@@ -23,4 +23,8 @@ export class UtilsService {
   async getCategories(){
     return await this.productCategoryRepository.find()
   }
+
+  async test() {
+    return 0
+  }
 }

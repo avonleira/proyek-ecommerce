@@ -7,12 +7,12 @@ export class PreCheckout{
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User)
-  @JoinColumn({name: 'user_id', referencedColumnName: 'id'})
+  @OneToOne(() => User, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   user: User;
 
-  @OneToOne(() => UserAddress)
-  @JoinColumn({name: 'user_address_id', referencedColumnName: 'id'})
+  @OneToOne(() => UserAddress, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   user_address: UserAddress;
 
   @Column({nullable: true})

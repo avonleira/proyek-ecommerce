@@ -9,8 +9,8 @@ export class ProductOptionValue {
   @Column()
   value: string;
 
-  @ManyToOne(() => ProductOption, (productOption) => productOption.product_option_values)
-  @JoinColumn({name: 'product_option_id', referencedColumnName: 'id'})
+  @ManyToOne(() => ProductOption, (productOption) => productOption.product_option_values, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   product_option_id: number;
 
   @CreateDateColumn()

@@ -23,6 +23,11 @@ export class UtilsController {
     return of(res.sendFile(join(process.cwd(), image.asset_url)))
   }
 
+  @Get('test')
+  async test() {
+    return await this.utilsService.test();
+  }
+
   @Get('province')
   async getProvince() {
     const headersRequest = {

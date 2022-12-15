@@ -14,8 +14,8 @@ export class UserAddress {
   @Column({default: false})
   is_default: boolean;
 
-  @ManyToOne(() => User, (user) => user.addresses)
-  @JoinColumn({name: 'user_id', referencedColumnName: 'id'})
+  @ManyToOne(() => User, (user) => user.addresses, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   user: User;
 
   @Column()

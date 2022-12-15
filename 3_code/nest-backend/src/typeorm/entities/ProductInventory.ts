@@ -10,8 +10,8 @@ export class ProductInventory {
   @Column({unique: true})
   SKU: string;
 
-  @ManyToOne(() => Product, (product) => product.product_inventories)
-  @JoinColumn({name: 'product_id', referencedColumnName: 'id'})
+  @ManyToOne(() => Product, (product) => product.product_inventories, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   product: Product;
 
   @Column()

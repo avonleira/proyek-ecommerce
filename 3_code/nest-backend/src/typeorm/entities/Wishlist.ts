@@ -7,12 +7,12 @@ export class Wishlist {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.wishlists)
-  @JoinColumn({name: 'user_id', referencedColumnName: 'id'})
+  @ManyToOne(() => User, (user) => user.wishlists, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   user: User;
 
-  @ManyToOne(() => Product, (product) => product.wishlists)
-  @JoinColumn({name: 'product_id', referencedColumnName: 'id'})
+  @ManyToOne(() => Product, (product) => product.wishlists, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   product: Product;
 
   @CreateDateColumn()

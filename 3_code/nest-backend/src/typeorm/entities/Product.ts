@@ -23,8 +23,8 @@ export class Product {
   @Column({nullable: true})
   weight: number;
 
-  @ManyToOne(() => ProductCategory, (ProductCategory) => ProductCategory.product)
-  @JoinColumn({name: 'product_category_id', referencedColumnName: 'id'})
+  @ManyToOne(() => ProductCategory, (ProductCategory) => ProductCategory.product, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   @Column({nullable: true})
   product_category_id: number;
 

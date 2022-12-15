@@ -8,12 +8,12 @@ export class Htrans {
   @PrimaryColumn()
   id: string;
 
-  @ManyToOne(() => User, (user) => user.htrans)
-  @JoinColumn({name: 'user_id', referencedColumnName: 'id'})
+  @ManyToOne(() => User, (user) => user.htrans, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   user: User;
 
-  @ManyToOne(() => UserAddress, (userAddress) => userAddress.htrans)
-  @JoinColumn({name: 'user_address_id', referencedColumnName: 'id'})
+  @ManyToOne(() => UserAddress, (userAddress) => userAddress.htrans, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   userAddress: UserAddress;
 
   @Column()

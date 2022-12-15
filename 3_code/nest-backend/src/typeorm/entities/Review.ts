@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Dtrans } from "./Dtrans";
 import { Product } from "./Product";
 import { User } from "./User";
 
@@ -7,15 +8,16 @@ export class Review {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.reviews)
-  @JoinColumn({name: 'user_id', referencedColumnName: 'id'})
+  @ManyToOne(() => User, (user) => user.reviews, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   user: User;
 
-  // @Column()
-  // dtrans: Dtrans;
+  @OneToOne(() => Dtrans, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
+  dtrans: Dtrans;
 
-  @ManyToOne(() => Product, (product) => product.reviews)
-  @JoinColumn({name: 'product_id', referencedColumnName: 'id'})
+  @ManyToOne(() => Product, (product) => product.reviews, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   product: Product;
 
   @Column()

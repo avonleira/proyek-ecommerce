@@ -9,15 +9,15 @@ import { Wishlist } from './Wishlist';
 
 @Entity({ name: 'dtrans' })
 export class Dtrans {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @ManyToOne(() => Htrans, (htrans) => htrans.dtrans)
-  @JoinColumn({name: 'htrans_id', referencedColumnName: 'id'})
+  @ManyToOne(() => Htrans, (htrans) => htrans.dtrans, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   htrans: Htrans;
 
-  @ManyToOne(() => Product, (product) => product.dtrans)
-  @JoinColumn({name: 'product_id', referencedColumnName: 'id'})
+  @ManyToOne(() => Product, (product) => product.dtrans, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   product: Product;
 
   @Column()

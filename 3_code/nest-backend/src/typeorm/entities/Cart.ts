@@ -7,12 +7,12 @@ export class Cart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.carts)
-  @JoinColumn({name: 'user_id', referencedColumnName: 'id'})
+  @ManyToOne(() => User, (user) => user.carts, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   user: User;
 
-  @ManyToOne(() => ProductInventory, (productInventory) => productInventory.carts)
-  @JoinColumn({name: 'product_inventory_id', referencedColumnName: 'id'})
+  @ManyToOne(() => ProductInventory, (productInventory) => productInventory.carts, {nullable: false, eager: true})
+  @JoinColumn({referencedColumnName: 'id'})
   product_inventory: ProductInventory;
 
   @Column()
