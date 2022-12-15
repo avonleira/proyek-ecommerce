@@ -14,6 +14,9 @@ import { CreateAddressDto } from '../../dtos/CreateAddress.dto';
 import { UpdateAddressDto } from '../../dtos/UpdateAddress.dto';
 import { SerializedAddress } from '../../serialization/SerializedAddress';
 import { CheckoutCartDto } from '../../dtos/CheckoutCart.dto';
+import { SerializedCheckout, SerializedCheckoutItem } from '../../serialization/SerializedCheckout';
+import { plainToClass } from 'class-transformer';
+import { CreateReviewDto } from '../../dtos/CreateReview.dto';
 
 @Controller('account')
 @UseGuards(JwtAuthGuard)
@@ -79,7 +82,9 @@ export class AccountController {
     @Request() req,
     @Body() checkoutCartDto: CheckoutCartDto
   ) {
-    return await this.accountService.checkoutCart(req.user, checkoutCartDto)
+    const result = await this.accountService.checkoutCart(req.user, checkoutCartDto)
+    // return result;
+    return {...result, cart: plainToClass(SerializedCheckout, {item: result.cart_refs}), cart_refs:undefined}
   }
 
   @Post('/cart/:product_inventory_id')
@@ -156,5 +161,20 @@ export class AccountController {
   @Delete('wishlist/:id_wishlist')
   async deleteWishlist(@Request() req, @Param('id_wishlist', ParseIntPipe) id_wishlist: number) {
     return await this.accountService.deleteWishlist(id_wishlist)
+  }
+
+  @Get('review')
+  async getAllReview(
+    @Request()req,
+  ) {
+    return await this.accountService.getAllReview(req.user);
+  }
+
+  @Post('review')
+  async createReview(
+    @Request() req,
+    @Body() createReviewDto: CreateReviewDto
+  ) {
+    return await this.accountService.createReview(req.user, createReviewDto)
   }
 }

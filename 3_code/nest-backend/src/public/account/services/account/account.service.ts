@@ -13,6 +13,11 @@ import { Wishlist } from 'src/typeorm/entities/Wishlist';
 import { CreateAddressDto } from '../../dtos/CreateAddress.dto';
 import { UpdateAddressDto } from '../../dtos/UpdateAddress.dto';
 import { CheckoutCartDto } from '../../dtos/CheckoutCart.dto';
+import { Review } from 'src/typeorm/entities/Review';
+import { CreateReviewDto } from '../../dtos/CreateReview.dto';
+import { PreCheckout } from 'src/typeorm/entities/PreCheckout';
+import { plainToClass } from 'class-transformer';
+import { ProductOptionValue } from 'src/typeorm/entities/ProductOptionValue';
 @Injectable()
 export class AccountService {
   constructor(
@@ -22,6 +27,9 @@ export class AccountService {
     @InjectRepository(Product) private readonly productRepository:Repository<Product>,
     @InjectRepository(ProductInventory) private readonly productInventoryRepository:Repository<ProductInventory>,
     @InjectRepository(Wishlist) private readonly wishlistRepository:Repository<Wishlist>,
+    @InjectRepository(Review) private readonly reviewRepository:Repository<Review>,
+    @InjectRepository(PreCheckout) private readonly preCheckoutRepository:Repository<PreCheckout>,
+    @InjectRepository(ProductOptionValue) private readonly productOptionValueRepository:Repository<ProductOptionValue>,
   ) {}
 
   async getUserProfile(id: number) {
@@ -151,11 +159,6 @@ export class AccountService {
       throw new BadRequestException('Failed to delete')
     return result
   }
-
-  async checkoutCart(user: User, checkoutCartDto: CheckoutCartDto) {
-    const promises = checkoutCartDto.carts.map((cart_id) => this.cartRepository.findOneBy({id: cart_id}))
-    return await Promise.all(promises);
-  }
   
   async getUserWishlist(user: User) {
     return await this.wishlistRepository.createQueryBuilder('wishlist').where('user_id=:id', {id: user.id}).getMany()
@@ -185,5 +188,62 @@ export class AccountService {
     if (!result.affected)
       throw new BadRequestException('Failed to delete')
     return result
+  }
+
+  async checkoutCart(user: User, checkoutCartDto: CheckoutCartDto) {
+    const getUser = await this.userRepository.createQueryBuilder('user')
+      .leftJoinAndSelect('user.addresses', 'address')
+      .where('user.id=:u_id', {u_id: user.id})
+      .getOne();
+    if (!getUser)
+      throw new NotFoundException('User not found');
+    var getPrecheckout = await this.preCheckoutRepository.createQueryBuilder('precheckout')
+      .where('user_id=:u_id', {u_id: user.id})
+      .getOne()
+    if (!getPrecheckout || checkoutCartDto.carts.length > 0) {
+      const cart_refs = checkoutCartDto.carts.map((cart) => { return { id: cart, is_checked: true } })
+      const precheckout = {
+        user: user,
+        user_address: getUser.addresses.filter((address) => address.is_default)[0] ?? undefined,
+        cart_refs: JSON.stringify(cart_refs),
+        voucher: checkoutCartDto.voucher ?? undefined
+      }
+      if (!getPrecheckout)
+        await this.preCheckoutRepository.save(plainToClass(PreCheckout, precheckout));
+      else 
+        await this.preCheckoutRepository.update({id: getPrecheckout.id},plainToClass(PreCheckout, precheckout));
+      getPrecheckout = await this.preCheckoutRepository.createQueryBuilder('precheckout')
+        .leftJoinAndSelect('precheckout.user_address', 'user_address')
+        .where('precheckout.user_id=:u_id', {u_id: user.id})
+        .getOne()
+    }
+    
+    const promises = JSON.parse(getPrecheckout.cart_refs).map(async (cart) => {
+      const data = await this.cartRepository.createQueryBuilder('cart')
+        .leftJoinAndSelect('cart.product_inventory', 'product_inventory')
+        .where('cart.user_id=:u_id AND cart.id=:c_id', {u_id: user.id, c_id: cart.id})
+        .getOne()
+      return {
+        is_checked: cart.is_checked,
+        ...data
+      }
+    })
+    const carts = await Promise.all(promises);
+    for (let i = 0; i < carts.length; i++) {
+      carts[i].product_inventory.combination_option = JSON.parse(carts[i].product_inventory.combination_option)
+      const promises2 = carts[i].product_inventory.combination_option.map(async(id) => this.productOptionValueRepository.findOneBy({id: id}))
+      carts[i].product_inventory.combination_option = await Promise.all(promises2);
+    }
+    return {...getPrecheckout, cart_refs: carts}
+  }
+
+  async getAllReview(user: User) {
+    return await this.reviewRepository.createQueryBuilder('review')
+      .where("user_id=:u_id", {u_id: user.id})
+      .getMany();
+  }
+
+  async createReview(user: User, createReviewDto: CreateReviewDto) {
+    return 0;
   }
 }

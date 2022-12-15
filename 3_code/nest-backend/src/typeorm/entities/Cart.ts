@@ -18,6 +18,9 @@ export class Cart {
   @Column()
   qty: number;
 
+  @Column({nullable: true})
+  note: string;
+
   @CreateDateColumn()
   created_at: Date;
 

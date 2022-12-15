@@ -15,6 +15,8 @@ import { ProductCategory } from '../../typeorm/entities/ProductCategory';
 import { ProductOption } from '../../typeorm/entities/ProductOption';
 import { ProductOptionValue } from '../../typeorm/entities/ProductOptionValue';
 import { Wishlist } from 'src/typeorm/entities/Wishlist';
+import { Review } from 'src/typeorm/entities/Review';
+import { PreCheckout } from 'src/typeorm/entities/PreCheckout';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -27,6 +29,8 @@ import { Wishlist } from 'src/typeorm/entities/Wishlist';
       ProductOption,
       ProductOptionValue,
       Wishlist,
+      Review,
+      PreCheckout
     ]),
     MulterModule.register({
       dest: './uploads/accounts',

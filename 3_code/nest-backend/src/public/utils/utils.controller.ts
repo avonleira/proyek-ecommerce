@@ -59,9 +59,23 @@ export class UtilsController {
       .catch((e) => e)
       .then((o) => o.data.rajaongkir.results)
   }
+
   @Get('header-categories')
   async getHeaderCategories(){
     let categories = await this.utilsService.getCategories()
     return {...categories}
+  }
+
+  @Get('midtrans/:order_id')
+  async getMidtransOrderStatus(@Param('order_id', ParseIntPipe) order_id: number ) {
+    const headersRequest = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": `Basic ${Buffer.from(`${process.env.MIDTRANS_SERVER_KEY}`+':').toString('base64')}`,
+    };
+  
+    return await this.httpService.axiosRef.get(`${process.env.MIDTRANS_BASE_URL}/${order_id}/status`, { headers: headersRequest})
+      .catch((e) => e)
+      .then((o) => o.data)
   }
 }

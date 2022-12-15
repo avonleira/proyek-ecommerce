@@ -32,5 +32,6 @@ import { Promo } from 'src/typeorm/entities/Promo';
   ])],
   controllers: [ProductController, FaqController, ProductCategoryController, ProductOptionController, PromoController],
   providers: [ProductService, FaqService, ProductCategoryService, ProductOptionService, PromoService],
+  exports: []
 })
 export class AdminModule {}

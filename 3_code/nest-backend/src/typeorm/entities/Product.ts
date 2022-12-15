@@ -3,6 +3,7 @@ import { Cart } from './Cart';
 import { Dtrans } from './Dtrans';
 import { ProductCategory } from './ProductCategory';
 import { ProductInventory } from './ProductInventory';
+import { Review } from './Review';
 import { Wishlist } from './Wishlist';
 
 @Entity({ name: 'product' })
@@ -50,6 +51,9 @@ export class Product {
 
   @OneToMany(() => Wishlist, (wishlist) => wishlist.product)
   wishlists: Wishlist[];
+
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];
 
   @OneToMany(() => Dtrans, (dtrans) => dtrans.product)
   dtrans: Dtrans[];

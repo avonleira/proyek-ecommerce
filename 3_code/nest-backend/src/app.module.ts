@@ -31,6 +31,8 @@ import { MidtransService } from './services/midtrans/service/midtrans/midtrans.s
 import { MidtransController } from './services/midtrans/controller/midtrans/midtrans.controller';
 import { Htrans } from './typeorm/entities/Htrans';
 import { Dtrans } from './typeorm/entities/Dtrans';
+import { Review } from './typeorm/entities/Review';
+import { PreCheckout } from './typeorm/entities/PreCheckout';
 
 @Module({
   imports: [
@@ -60,6 +62,8 @@ import { Dtrans } from './typeorm/entities/Dtrans';
         Wishlist,
         Htrans,
         Dtrans,
+        Review,
+        PreCheckout
       ],
       synchronize: true,
     }),

@@ -1,5 +1,6 @@
 import { Exclude, Transform } from "class-transformer";
 export class GeneralSerialization {
+
   @Exclude()
   created_at: Date;
 
@@ -15,8 +16,10 @@ export class GeneralSerialization {
   @Transform(({ value }) => JSON.parse(value).map((image) => `${process.env.END_POINT}/utils/image/${String(image).split('/')[1]}`))
   image_refs: string;
 
-  @Exclude()
+  @Exclude()  
   ref_tok: any;
+
+  combination_option: string;
 
   constructor(partial: Partial<GeneralSerialization>) {
     Object.assign(this, partial)

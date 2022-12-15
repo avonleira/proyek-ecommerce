@@ -1,6 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, OneToMany } from 'typeorm';
 import { Cart } from './Cart';
 import { Htrans } from './Htrans';
+import { PreCheckout } from './PreCheckout';
+import { Review } from './Review';
 import { UserAddress } from './UserAddress';
 import { Wishlist } from './Wishlist';
 
@@ -53,4 +55,7 @@ export class User {
 
   @OneToMany(() => Htrans, (htrans) => htrans.user)
   htrans: Htrans[];
+
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];
 }

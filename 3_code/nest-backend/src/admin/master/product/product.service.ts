@@ -6,7 +6,7 @@ import { ProductCategory } from 'src/typeorm/entities/ProductCategory';
 import { ProductInventory } from 'src/typeorm/entities/ProductInventory';
 import { ProductOption } from 'src/typeorm/entities/ProductOption';
 import { ProductOptionValue } from 'src/typeorm/entities/ProductOptionValue';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { BulkCreateProductInventoryDto } from './dtos/BulkCreateProductInventory.dto';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
@@ -82,8 +82,9 @@ export class ProductService {
       throw new BadRequestException('Cannot delete image that doesn\'t belong to the product')
     image_refs.splice(idx, 1);
     const product_result = await this.productRepository.update({id: product_id}, {...product, image_refs:JSON.stringify(image_refs)})
-    const image_result = await this.ImageRepository.delete({id:image_id});
-    if (!product_result.affected || !image_result.affected)
+    // const image_result = await this.ImageRepository.delete({id:image_id});
+    // if (!product_result.affected || !image_result.affected)
+    if (!product_result.affected)
       throw new InternalServerErrorException('Failed to update');
 
     return await this.productRepository.findOneBy({id:product_id});
@@ -130,7 +131,7 @@ export class ProductService {
     for (let index = 0; index < bulkCreateProductInventoryDto.product_inventories.length; index++) {
       const product_inventory = bulkCreateProductInventoryDto.product_inventories[index];
       const combination_option = JSON.stringify(product_inventory.combination_option);
-      const image_refs = JSON.stringify(product_inventory.image_refs);
+      const image_refs = JSON.stringify(product_inventory.image_refs.map((im) => `image/${im}`));
 
       const result = await this.productInventoryRepository.createQueryBuilder('pi')
         .where('(combination_option=:co AND product_id=:p_id) OR sku=:sku', {co: combination_option, p_id: id, sku: product_inventory.SKU}).getMany()
@@ -191,5 +192,16 @@ export class ProductService {
       }
       return new InternalServerErrorException(error.code)
     }
+  }
+
+  async getCombinationOptions(combination_option) {
+    combination_option = JSON.parse(combination_option)
+    const promises = combination_option.map((co) => this.productOptionValueRepository.createQueryBuilder('ov')
+      .leftJoinAndSelect('ov.product_option_id', 'product_option_id')
+      .where('ov.id=:ov_id', {ov_id: co})
+      .getOne()
+    )
+    const carts = await Promise.all(promises);
+    return carts;
   }
 }
