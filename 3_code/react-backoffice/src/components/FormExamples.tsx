@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
-import { Autocomplete, Box, Button, FormControl, FormControlLabel, FormControlLabelProps, FormControlProps, IconButton, InputAdornment, InputLabel, InputLabelProps, MenuItem, OutlinedInput, OutlinedInputProps, Select, Stack, Switch, SwitchProps, TextField, TextFieldProps } from "@mui/material";
+import { Autocomplete, Box, BoxProps, Button, ButtonProps, FormControl, FormControlLabel, FormControlLabelProps, FormControlProps, IconButton, InputAdornment, InputLabel, InputLabelProps, MenuItem, OutlinedInput, OutlinedInputProps, Select, Stack, Switch, SwitchProps, TextField, TextFieldProps } from "@mui/material";
 import { DateTimePicker } from "@mui/lab";
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import { IInputSelectProps } from "../interfaces/componentsInterface";
 import { quillFormats, quillModules } from "../utils/reactQuillHelper";
@@ -66,6 +67,7 @@ export default function FormExamples() {
       id: "input-autocomplete", multiple: true, filterSelectedOptions: true,
       options: mockOptions,
       getOptionLabel: (option: typeof mockOptions[0]) => option.label,
+      // isOptionEqualToValue
     },
     inputProps: {
       label: "Contoh Autocomplete", size: "small", placeholder: "Pilih...",
@@ -75,6 +77,19 @@ export default function FormExamples() {
     controllerProps: { control: FormHook.control, name: "switch", defaultValue: false },
     formControlLabelProps: { label: "Contoh Switch", labelPlacement: "end" } as FormControlLabelProps,
     switchProps: { size: "medium" } as SwitchProps,
+  }
+  const InputImageProps = {
+    label: "Upload Image",
+    previewProps: {
+      component: "img", loading: "lazy",
+      src: FormHook.watch("image")&&FormHook.watch("image")[0]?URL.createObjectURL(FormHook.watch("image")[0]):"",
+    } as BoxProps,
+    buttonProps: { size: "small", fullWidth: true, variant: "contained", component: "label", startIcon: <UploadFileIcon /> } as ButtonProps,
+    inputProps: {
+      component: "input", type: "file", accept: "image/*", hidden: true,
+      ...FormHook.register("image"),
+      // onChange: (e: any) => { setCurrDataRowImg(e.target.files[0]);setCurrDataRowImgComp(URL.createObjectURL(e.target.files[0])) }
+    } as BoxProps,
   }
   const [InputQuillValue, setInputQuillValue] = useState<string>("");
   const InputQuillProps = {
@@ -141,6 +156,13 @@ export default function FormExamples() {
           />
         )}
       />
+      <Stack spacing={1}>
+        <Box {...InputImageProps.previewProps} />
+        <Button {...InputImageProps.buttonProps}>
+          {InputImageProps.label}
+          <Box {...InputImageProps.inputProps} />
+        </Button>
+      </Stack>
       <Box className="admin-quill">
         <ReactQuill {...InputQuillProps} />
       </Box>

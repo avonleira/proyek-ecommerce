@@ -1,0 +1,16 @@
+import { useState } from "react";
+import JoditReact from "jodit-react-ts";
+import { Typography } from "@mui/material";
+
+function TestJoditReact() {
+  const [value, setValue] = useState<string>();
+
+  return (
+    <div>
+      <JoditReact onChange={(content) => setValue(content)} config={{ placeholder: "Test" }}/>
+      <Typography>{value}</Typography>
+    </div>
+  )
+}
+
+export default TestJoditReact

@@ -13,10 +13,11 @@ export const AdminMuiTheme = createTheme({
   },
   palette: {
     primary: {
-      main: colors.bluePurple.main,
+      main: "#fd841f",
+      contrastText: "#fff"
     },
     secondary: {
-      main: colors.cutePink.main,
+      main: colors.grey[40],
     }
   },
   // shape: {

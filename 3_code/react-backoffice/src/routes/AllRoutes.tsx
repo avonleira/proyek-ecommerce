@@ -11,6 +11,22 @@ import Page404 from "../pages/404";
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import AdminHome from '../pages/AdminHome';
+import CmsLanding from '../pages/cms/CmsLanding';
+import CmsAbout from '../pages/cms/CmsAbout';
+import CmsContact from '../pages/cms/CmsContact';
+import CmsPrivacyPolicy from '../pages/cms/CmsPrivacyPolicy';
+import CmsTermsConditions from '../pages/cms/CmsTermsConditions';
+import MasterFaq from '../pages/master/faq/MasterFaq';
+import MasterFaqCreate from '../pages/master/faq/MasterFaqCreate';
+import MasterFaqDetail from '../pages/master/faq/MasterFaqDetail';
+import MasterCategory from '../pages/master/category/MasterCategory';
+import MasterTag from '../pages/master/tag/MasterTag';
+import MasterPromo from '../pages/master/promo/MasterPromo';
+import MasterPromoCreate from '../pages/master/promo/MasterPromoCreate';
+import MasterPromoDetail from '../pages/master/promo/MasterPromoDetail';
+import MasterProduct from '../pages/master/product/MasterProduct';
+import MasterProductDetail from '../pages/master/product/MasterProductDetail';
+import ManageUser from '../pages/manage/user/ManageUser';
 
 
 export interface IRoute {
@@ -28,9 +44,51 @@ export const MAIN_ROUTES: IRoute[] = [
     path: "/", //element: <RouteAdminMiddleware />,
     children: [
       { index: true, path: "/", label: "Dashboard", icon: <Icon children="dashboard"/>, element: <AdminHome /> },
-      // { path: "/about-us", element: <MainAbout /> },
-      // { path: "/kegiatan", element: <MainKegiatan /> },
-      // { path: "/contact-us", element: <MainKontak /> },
+      {
+        label: "Master", icon: <Icon children="post_add" />,
+        children: [
+          { path: "/master/faq", label: "FAQ", icon: <Icon children="question_answer"/>, element: <MasterFaq /> },
+          { path: "/master/faq/c", hideInNav: true, element: <MasterFaqCreate /> },
+          { path: "/master/faq/d/:id_faq", hideInNav: true, element: <MasterFaqDetail /> },
+          { path: "/master/category", label: "Category", icon: <Icon children="category"/>, element: <MasterCategory /> },
+          { path: "/master/category/c", hideInNav: true, element: <MasterCategory /> },
+          { path: "/master/category/d/:id_category", hideInNav: true, element: <MasterCategory /> },
+          { path: "/master/tag", label: "Tag", icon: <Icon children="tag"/>, element: <MasterTag /> },
+          { path: "/master/tag/c", hideInNav: true, element: <MasterTag /> },
+          { path: "/master/tag/d/:id_tag", hideInNav: true, element: <MasterTag /> },
+          { path: "/master/promo", label: "Promo", icon: <Icon children="sell"/>, element: <MasterPromo /> },
+          { path: "/master/promo/c", hideInNav: true, element: <MasterPromoCreate /> },
+          { path: "/master/promo/d/:id_promo", hideInNav: true, element: <MasterPromoDetail /> },
+          { path: "/master/product", label: "Product", icon: <Icon children="inventory"/>, element: <MasterProduct /> },
+          { path: "/master/product/d/:id_product", hideInNav: true, element: <MasterProductDetail /> },
+        ]
+      },
+      {
+        label: "Manage", icon: <Icon children="auto_awesome_motion" />,
+        children: [
+          { path: "/manage/user", label: "User", icon: <Icon children="person"/>, element: <ManageUser /> },
+          { path: "/manage/user/c", hideInNav: true, element: <ManageUser /> },
+          { path: "/manage/user/d/:id_user", hideInNav: true, element: <ManageUser /> },
+        ]
+      },
+      {
+        label: "CMS", icon: <Icon children="art_track"/>,
+        children: [
+          { index: true, path: "/cms/landing", label: "Landing", icon: <Icon children="home"/>, element: <CmsLanding /> },
+          { path: "/cms/about-us", label: "About Us", icon: <Icon children="people"/>, element: <CmsAbout /> },
+          { path: "/cms/contact-us", label: "Contact Us", icon: <Icon children="contact_phone"/>, element: <CmsContact /> },
+          { path: "/cms/privacy-policy", label: "Privacy & Policy", icon: <Icon children="policy"/>, element: <CmsPrivacyPolicy /> },
+          { path: "/cms/terms-conditions", label: "Terms & Conditions", icon: <Icon children="description"/>, element: <CmsTermsConditions /> },
+          { path: "/cms/login", label: "Login", icon: <Icon children="file_open"/>, element: <CmsTermsConditions /> },
+          { path: "/cms/register", label: "Register", icon: <Icon children="file_open"/>, element: <CmsTermsConditions /> },
+        ],
+      },
+      // {
+      //   label: "Report", icon: <Icon children="analyticsart_track"/>,
+      //   children: [
+      //     { path: "/report/sales", label: "Sales", icon: <Icon children="diversity_3" />, element: <AdminReportPokokdoa /> },
+      //   ],
+      // },
       { path: "/test", element: <Test /> },
     ],
   },

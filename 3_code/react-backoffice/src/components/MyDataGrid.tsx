@@ -33,6 +33,7 @@ interface IProps {
   columns?: GridColumns
   pageSize?: number
   rowsPerPageOptions?: number[]
+  noGridToolbar?: boolean
   CustomGridToolbar?: React.JSXElementConstructor<any> | null
   density?: GridDensity
   autoHeight?: boolean
@@ -45,7 +46,7 @@ interface IProps {
 export default function MyDataGrid(props: IProps) {
   const { rows = [], columns } = props;
   const { pageSize, rowsPerPageOptions, CustomGridToolbar, density } = props;
-  const { autoHeight = true, disableSelectionOnClick = true } = props;
+  const { autoHeight = true, disableSelectionOnClick = true, noGridToolbar = false } = props;
   const { checkboxSelection = false, selectionModel = [], setSelectionModel = () => {}} = props;
 
   const [gridPageSize, setgridPageSize] = useState(pageSize??defaultPageSize)
@@ -60,12 +61,12 @@ export default function MyDataGrid(props: IProps) {
       autoHeight={autoHeight}
       density={density??"compact"}
       disableSelectionOnClick={disableSelectionOnClick}
-      components={{
+      components={noGridToolbar?undefined:{
         Toolbar: CustomGridToolbar??GridToolbar,
       }}
       checkboxSelection={checkboxSelection}
       onSelectionModelChange={(newValue) => {
-        console.log("New Selection Model Value", newValue);
+        // console.log("New Selection Model Value", newValue);
         setSelectionModel(newValue)
       }}
       selectionModel={selectionModel}

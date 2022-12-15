@@ -4,6 +4,7 @@ import { CssBaseline } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import MyRoutes from './routes/MyRoutes';
+import { DialogProvider } from './hooks/dialogHook';
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       <CssBaseline />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         {/* <AuthProvider> */}
-          <MyRoutes />
+          <DialogProvider>
+            <MyRoutes />
+          </DialogProvider>
         {/* </AuthProvider> */}
       </LocalizationProvider>
     </Fragment>

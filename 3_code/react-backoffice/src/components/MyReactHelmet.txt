@@ -1,0 +1,33 @@
+import { Helmet } from "react-helmet";
+import Page from "../backend/Models/Page"
+
+interface IProps {
+  pageData?: Page
+}
+
+export default function MyReactHelmet(props: IProps) {
+  const { pageData } = props;
+
+  if (!!pageData && !!pageData?.seo) return (
+    <Helmet>
+      { Boolean(pageData?.seo?.title) ? (
+        <title>{pageData?.seo?.title}</title>
+      ) : <title>{'GKT Pondok Indah'}</title> }
+      { pageData?.seo?.metas?.map((item, index) => (
+        <meta key={`page-meta-${index}`} name={item.name} content={item.content}/>
+      )) }
+      {/* { pageData?.seo?.links?.map((item, index) => (
+        <link key={`page-link-${index}`} rel={item.rel} href={item.href} />
+      )) } */}
+      {/* { Object.entries(pageData?.seo?.metas ?? {}).map(([key, value], index) => (
+        <meta key={index} name={key} content={value} />
+      )) } */}
+    </Helmet>
+  )
+  else return (
+    <Helmet>
+      <title>{'GKT Pondok Indah'}</title>
+      <meta name="description" content="GKT Pondok Indah Website" />
+    </Helmet>
+  )
+}

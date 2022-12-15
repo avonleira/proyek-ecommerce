@@ -8,7 +8,7 @@ interface IProps {
  other?: any
 }
 
-export default function TabPanel(props: IProps) {
+export default function MyTabPanel(props: IProps) {
   const { sx, children, value, index, ...other } = props;
 
   return (
@@ -21,7 +21,7 @@ export default function TabPanel(props: IProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ ...sx, pt: 2 }}>
+        <Box sx={{ ...sx }}>
           {children}
         </Box>
       )}

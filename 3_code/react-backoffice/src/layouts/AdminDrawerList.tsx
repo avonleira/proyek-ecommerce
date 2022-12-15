@@ -48,6 +48,7 @@ interface IListProps {
   data: IRoute
   changePage?: any
   OpenChild?: boolean
+  parentSetChildOpen?: () => void;
   padding?: number
   refference?: React.RefObject<HTMLElement> | any
 }
@@ -58,10 +59,18 @@ function AdminDrawerListLi(props: IListProps) {
   const { changePage, OpenChild, padding = 0 } = props
   const { refference } = props
 
-  const [Open, setOpen] = useState(OpenChild??true)
+  const [Open, setOpen] = useState<boolean>(OpenChild??false)
+
+  const parentSetChildOpen = () => {
+    setOpen(true);
+    if (props.parentSetChildOpen) props.parentSetChildOpen();
+  }
 
   useEffect(() => {
-    if (location.pathname === data.path) setOpen(true)
+    if (location.pathname === data.path) {
+      setOpen(true)
+      parentSetChildOpen()
+    }
   }, [location.pathname, data.path])
 
   if (data.hideInNav) return null;
@@ -95,9 +104,9 @@ function AdminDrawerListLi(props: IListProps) {
 
       </ListItemButton>
       { data.children ? (
-        <Collapse in={Open} timeout="auto" unmountOnExit>
+        <Collapse in={Open} timeout="auto">
           { data.children?.map((chd, idx) => (
-            <AdminDrawerListLi key={idx} data={chd} changePage={changePage} padding={padding+2} refference={refference} />
+            <AdminDrawerListLi key={idx} data={chd} changePage={changePage} padding={padding+2} refference={refference} parentSetChildOpen={parentSetChildOpen} />
           )) }
         </Collapse>
       ) : null }

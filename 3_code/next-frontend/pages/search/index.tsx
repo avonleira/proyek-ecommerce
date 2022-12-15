@@ -8,6 +8,7 @@ import MainLayout from "../../layouts/main/MainLayout";
 import { mockProducts } from "../../mocks/products";
 import { ProductCard } from "../../components/ProductCard";
 import MyPagination from "../../components/MyPagination";
+import { axiosBackend } from "../../configs/apis/axiosBackend";
 
 interface IProps {
   pageProps: PagePropsInterface
@@ -160,11 +161,30 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   let searchProductPageProps: PagePropsInterface = {
     title: `Cari ${context.query.q} | Duta Tech`,
   }
+  // console.log(context.query)
+  let products: any[] = mockProducts
+  await axiosBackend.get("/page/search-product",  {
+    params: {
+      q: context.query.q??"",
+      // tsr: context.query.tsr??"0",
+      // pmin: context.query.pmin??"0",
+      // pmax: context.query.pmax??"3000000",
+      sort: context.query.sort??"1",
+      // page: context.query.page??"1",
+    }
+  })
+  .then(({data}) => {
+    // console.log(data.content)
+    // products = data.content??[]
+  })
+  .catch(err => {
+    products = mockProducts;
+  })
   
   return {
     props: {
       pageProps: searchProductPageProps,
-      products: mockProducts
+      products
     },
   }
 }

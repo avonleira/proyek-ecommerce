@@ -1,6 +1,8 @@
 import { forwardRef, Fragment } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogProps, DialogTitle, Slide } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogProps, DialogTitle, IconButton, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
+
+import CloseIcon from '@mui/icons-material/Close';
 
 // const Transition = forwardRef(function Transition(
 //   props: TransitionProps & {
@@ -14,6 +16,7 @@ import { TransitionProps } from '@mui/material/transitions';
 interface IProps {
   open?: boolean
   setOpen?: (newValue: boolean) => void
+  onClose?: () => void
   useTransition?: boolean
   TransitionComponent?: React.JSXElementConstructor<TransitionProps & { children: React.ReactElement<any, any>; }> | undefined
   maxWidth?: DialogProps['maxWidth']
@@ -44,7 +47,20 @@ export default function MyDialog(props: IProps) {
       aria-describedby="alert-dialog-slide-description"
     >
       { props.titleComponent ?? (
-        <DialogTitle>{props.title??"Dialog Title"}</DialogTitle>
+        <DialogTitle>
+          {props.title??"Dialog Title"}
+          {props.onClose ? (
+            <IconButton
+              aria-label="close" onClick={props.onClose}
+              sx={{
+                position: 'absolute', right: 8, top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          ) : null}
+        </DialogTitle>
       ) }
       { props.contentComponent ?? (
         <DialogContent>

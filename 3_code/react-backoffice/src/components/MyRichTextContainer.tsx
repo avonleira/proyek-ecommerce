@@ -32,3 +32,15 @@ export function MyRichTypography(props: TypographyProps) {
     />
   )
 }
+
+export function MyJoditTypography(props: TypographyProps) {
+  const { children = "<h2>This is example of rich text editor view.</h2><p>Rich text editor view.</p>" } = props;
+
+  return (
+    <Typography {...props} children={undefined}
+      dangerouslySetInnerHTML={{
+        __html: String(children),
+      }}
+    />
+  )
+}

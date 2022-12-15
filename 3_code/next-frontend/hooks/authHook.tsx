@@ -9,7 +9,7 @@ interface IAuthContext {
   userToken: string|null
   authError: any|null
   LoginBackend: (email: string, password: string) => Promise<unknown | undefined>
-  RegisterBackend: (email: string, password: string, confirm_password: string, first_name: string, last_name: string, gender: "male"|"female", phone_number: string, date_birth: Date) => Promise<unknown | undefined>
+  RegisterBackend: (email: string, password: string, confirm_password: string, first_name: string, last_name: string, gender: "male"|"female"|null, phone_number: string, date_birth: Date|null) => Promise<unknown | undefined>
   LogoutBackend: () => Promise<unknown | undefined>
 }
 
@@ -86,7 +86,7 @@ const AuthProvider = (props: any) => {
     })
   }
 
-  const RegisterBackend = async (email: string, password: string, confirm_password: string, first_name: string, last_name: string, gender: "male"|"female", phone_number: string, date_birth: Date) => {
+  const RegisterBackend = async (email: string, password: string, confirm_password: string, first_name: string, last_name: string, gender: "male"|"female"|null, phone_number: string, date_birth: Date|null) => {
     return new Promise(async (resolve, reject) => {
       await AuthService.register(email, password, confirm_password, first_name, last_name, gender, phone_number, date_birth)
       .then(({user, token}) => {

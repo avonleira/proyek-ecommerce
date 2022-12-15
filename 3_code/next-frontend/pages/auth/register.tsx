@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import MyNextHead from "../../components/MyNextHead";
 import { registerPageProps, registerPasswordTerms } from "../../data/pageProps";
-import registerImage from "../../public/images/Register.jpg";
+import { useAuth } from "../../hooks/authHook";
 
 interface IProps {
   pageProps: typeof registerPageProps
@@ -12,17 +13,20 @@ interface IProps {
 }
 
 const RegisterPage = (props: IProps) => {
+  const router = useRouter()
+  const { RegisterBackend } = useAuth();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPass, setShowPass] = useState<boolean>(false);
   const [passTerms, setPassTerms] = useState<typeof registerPasswordTerms>(props.passwordTerms);
   const registerFormHook = useForm();
 
   const InputFirstNameProps = {
     placeholder: "Nama Depan", type: "text", required: true,
-    ...registerFormHook.register("firstName"),
+    ...registerFormHook.register("first_name"),
   }
   const InputLastNameProps = {
     placeholder: "Nama Belakang", type: "text", required: true,
-    ...registerFormHook.register("lastName"),
+    ...registerFormHook.register("last_name"),
   }
   const InputEmailProps = {
     placeholder: "Email", type: "email", required: true,
@@ -30,7 +34,7 @@ const RegisterPage = (props: IProps) => {
   }
   const InputPhoneProps = {
     placeholder: "No. Telepon", type: "tel", required: true,
-    ...registerFormHook.register("phone"),
+    ...registerFormHook.register("phone_number"),
   }
   const InputPasswordProps = {
     placeholder: "Password", type: showPass?"text":"password", required: true, autoComplete: "off",
@@ -38,11 +42,19 @@ const RegisterPage = (props: IProps) => {
   }
   const InputCPasswordProps = {
     placeholder: "Konfirmasi password", type: showPass?"text":"password", required: true, autoComplete: "off",
-    ...registerFormHook.register("passwordConfirmation"),
+    ...registerFormHook.register("confirm_password"),
   }
 
   const registerFormSubmit = async (data: any) => {
-    console.log(data)
+    // console.log(data)
+    const { email, password, confirm_password, first_name, last_name, phone_number } = data;
+    setIsLoading(true)
+    await RegisterBackend(email, password, confirm_password, first_name, last_name, "male", phone_number, null)
+    .then(res => {
+      router.replace("/")
+    })
+    .catch(err => { console.log(err) })
+    .finally(() => setIsLoading(false))
   }
 
   useEffect(() => {
@@ -88,13 +100,13 @@ const RegisterPage = (props: IProps) => {
               <input type="checkbox" id="show-password" className="form-checkbox mr-1" onChange={() => { setShowPass(!showPass) }} />
               <label htmlFor="show-password" className="text-sm">Tunjukan password</label>
             </div>
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <ul className="text-xs">
                 { passTerms?.map((item) => (
                   <li key={`pass-terms-${item.id}`} className={`${item.filled?"text-primary-500":"text-gray-400"}`}>{item.label}</li>
                 )) }
               </ul>
-            </div>
+            </div> */}
             <p className="text-center text-sm">
               Dengan mendaftar, Anda menyetujui{" "}
               <Link href="/privacy-policy">

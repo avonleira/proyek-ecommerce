@@ -3,12 +3,14 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 
 export interface IMyPopupMenuItem {
   type: 'divider' | 'avatar' | 'menu'
   avatar?: any | JSX.Element
   label?: string
   icon?: any | JSX.Element
+  textColor?: string
   onClick?: any
 }
 
@@ -19,17 +21,20 @@ const generateMenuItem = (item: IMyPopupMenuItem, idx: number) => {
   else if (item.type === 'avatar') {
     return (
       <MenuItem key={idx} onClick={item.onClick ?? null}>
-        {item.avatar ?? <Avatar />} {item.label ?? ''}
+        {item.avatar ?? <Avatar />}
+        <Typography noWrap>{item.label ?? ''}</Typography>
       </MenuItem>
     )
   }
   else if (item.type === 'menu') {
     return (
       <MenuItem key={idx} onClick={item.onClick ?? null}>
-        <ListItemIcon>
-          {item.icon ?? null}
-        </ListItemIcon>
-        {item.label ?? ''}
+        { item.icon ? (
+          <ListItemIcon>
+            {item.icon}
+          </ListItemIcon>
+        ) : null }
+        <Typography noWrap color={item.textColor}>{item.label ?? ''}</Typography>
       </MenuItem>
     )
   }
@@ -40,6 +45,7 @@ interface IProps {
   anchorEl: Element | ((element: Element) => Element) | null | undefined
   handleClose?: any
   menuItems?: IMyPopupMenuItem[]
+  sx?: any
 }
 
 export default function MyPopupMenu(props: IProps) {
@@ -80,6 +86,7 @@ export default function MyPopupMenu(props: IProps) {
       }}
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      sx={{ ...props.sx }}
     >
       { menuItems.map((item, idx) => (generateMenuItem(item, idx))) }
     </Menu>

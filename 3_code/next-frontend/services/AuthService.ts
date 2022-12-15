@@ -1,12 +1,14 @@
 import { axiosBackend } from '../configs/apis/axiosBackend';
 import { IAuthResponse, IUser } from '../interfaces/authInterface';
 
-async function register(email: string, password: string, confirm_password: string, first_name: string, last_name: string, gender: "male"|"female", phone_number: string, date_birth: Date) {
+async function register(email: string, password: string, confirm_password: string, first_name: string, last_name: string, gender: "male"|"female"|null, phone_number: string, date_birth: Date|null) {
   return new Promise<{user: IUser, token: string}>(async (resolve, reject) => {
     return await axiosBackend.post("/auth/register", {
       email, password, confirm_password,
       first_name, last_name,
-      gender, phone_number, date_birth
+      gender: gender===null?undefined:gender,
+      phone_number,
+      date_birth: date_birth===null?undefined:date_birth,
     })
     .then(res => {
       let data = res.data as IAuthResponse;
@@ -41,6 +43,7 @@ async function login(email: string, password: string) {
           profile_picture: data.profile_picture,
           gender: data.gender,
           date_birth: data.date_birth,
+          phone_number: data.phone_number,
         },
         token: data.token,
       })
@@ -62,6 +65,7 @@ async function refreshToken() {
           profile_picture: data.profile_picture,
           gender: data.gender,
           date_birth: data.date_birth,
+          phone_number: data.phone_number,
         },
         token: data.token,
       })
