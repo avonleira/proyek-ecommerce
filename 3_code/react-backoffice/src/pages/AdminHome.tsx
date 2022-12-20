@@ -35,9 +35,9 @@ export default function AdminHome() {
         <Typography variant="inherit" component="span" color={"primary"}>{"# "}</Typography>
         {`Welcome, ${userNow?.displayName ?? userNow?.email}!`}
       </Typography>
-      <Typography variant="subtitle1">
-        {"Fitur untuk dashboard akan menyusul di patch berikutnya. asd"}<Icon children="google" />
-      </Typography>
+      {/* <Typography variant="subtitle1">
+        {"Fitur untuk dashboard akan menyusul di patch berikutnya."}<Icon children="google" />
+      </Typography> */}
     </AdminLayout>
   )
 }

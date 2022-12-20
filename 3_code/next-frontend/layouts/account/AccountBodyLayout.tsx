@@ -16,8 +16,8 @@ function AccountBodyLayout(props: IProps) {
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(true);
   
   const inboxMenu = [
-    { label: "Diskusi Produk", path: "/account/discussion" },
-    { label: "Ulasan", path: "/account/reviews" },
+    { label: "Diskusi Produk", path: "/account/inbox/discussion" },
+    { label: "Ulasan", path: "/account/inbox/reviews" },
   ]
   const shopMenu = [
     { label: "Menunggu Pembayaran", path: "/account/payment-list" },

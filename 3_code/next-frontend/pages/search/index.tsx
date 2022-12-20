@@ -20,7 +20,7 @@ function SearchProductPage(props: IProps) {
   const router = useRouter();
   // const [currPage, setCurrPage] = useState<number>(!!router.query.page?Number(router.query.page):1);
   const currPage = !!router.query.page?Number(router.query.page):1;
-  const pageCount = 1;
+  const pageCount = 10;
 
   const sortOption = [
     { value: "1", label: "Paling Relevan", },
@@ -120,7 +120,8 @@ function SearchProductPage(props: IProps) {
         <div className="col-span-8">
           <div className="flex flex-row items-center justify-between gap-4 mb-8">
             <p className="text-sm line-clamp-1">
-              {`Menampilkan ${1} - ${60} barang dari total ${356} untuk `}
+              {/* {`Menampilkan ${1} - ${60} barang dari total ${356} untuk `} */}
+              {"Menampilkan barang untuk "}
               <span className="font-semibold">{`"${router.query.q}"`}</span>
             </p>
             <div className="flex flex-row items-center gap-1">
@@ -175,7 +176,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   })
   .then(({data}) => {
     // console.log(data.content)
-    // products = data.content??[]
+    products = data.content??[]
   })
   .catch(err => {
     products = mockProducts;
